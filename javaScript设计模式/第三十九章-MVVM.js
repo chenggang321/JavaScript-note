@@ -1,6 +1,11 @@
-/**
- * Created by HH_Girl on 2018/4/8.
- */
+/*
+*  MVVM（Model-View-ViewModel)是在MVC(Model-View-Control)模式之后引出的新的开发模式，
+*  他与MVC模式一样用于把视图（界面）和数据进行解耦，不同的是采用ViewModel来完成数据
+*  与视图的双向绑定，通过自动化的方式承担大部分数据工作，来解决由于界面复杂化和快速
+*  迭代带来的问题。
+* */
+
+//通过属性劫持 完成 MVVM
 var html=`
     <input type="text" v-model="msg">{{msg}}<p>{{msg2}}</p>
 `;
@@ -124,10 +129,57 @@ Dep.prototype={
     }
 };
 
-new Mvvm({
+/*new Mvvm({
     el:'#app',
     data:{
         msg:'hello world!',
         msg2:'this is msg2!'
     }
-});
+});*/
+
+
+var Model = {
+    msg:'hello world'
+};
+
+var View = {
+    init:function(el){
+        //将数据与View绑定
+        ViewModel.bind(Model);
+        //解析Dom
+        this.processNode(el);
+    },
+    processNode:function(el){
+        var node = document.querySelector(el);
+        var frag = document.createDocumentFragment(),child;
+        while(child = node.firstChild){
+            this.compile(child);
+            frag.appendChild(child);
+        }
+        node.appendChild(frag);
+    },
+    compile:function(node){
+        console.log(View.msg);
+        View.msg = 'oooo';
+    }
+};
+
+var ViewModel={
+    bind:function(m){
+        Object.keys(m).forEach(function(key){
+            Object.defineProperty(View,key,{
+                get:function(){
+                    console.log('get');
+                    return m[key];
+                },
+                set:function(newVal){
+                    console.log('set');
+                    m[key] = newVal;
+                }
+            })
+        });
+
+    }
+};
+
+console.log(View.init('#app'));
