@@ -8,6 +8,9 @@
 //通过属性劫持 完成 MVVM
 var html=`
     <input type="text" v-model="msg">{{msg}}<p>{{msg2}}</p><p>{{msg}}</p>
+    <ul v-for="(item,index) in list">
+        <li>{{index}}{{list.title}}</li>
+    </ul>
 `;
 var div = document.createElement('div');
 div.id='app';
@@ -16,7 +19,14 @@ document.body.appendChild(div);
 
 var Model = {
     msg:'hello world',
-    msg2:'hello world2'
+    msg2:'hello world2',
+    list:[
+        {title:'Athis is text1'},
+        {title:'Athis is text1'},
+        {title:'Athis is text1'},
+        {title:'Athis is text1'},
+        {title:'Athis is text1'}
+    ]
 };
 var View = {
     init:function(el){
@@ -28,12 +38,18 @@ var View = {
     subs:[],
     processNode:function(el){
         var node = document.querySelector(el);
-        var frag = document.createDocumentFragment(),child;
+        /*var frag = document.createDocumentFragment(),child;
         while(child = node.firstChild){
+            console.log(child);
             this.compile(child);
             frag.appendChild(child);
         }
-        node.appendChild(frag);
+        node.appendChild(frag);*/
+        var in_elem=node.getElementsByTagName('*');
+        console.log(in_elem);
+        [...in_elem].forEach(function(elem){
+            this.compile(elem);
+        })
     },
     compile:function(node){
         function Sub(node,name,nodeType){
@@ -61,6 +77,17 @@ var View = {
                     var sub = new Sub(node,name,'input');
                     self.render(sub);
                     self.subs.push(sub);
+                }
+                if(attr.nodeName === 'v-for'){
+                    console.log(attr.nodeValue);
+                    var reg = /\((\w+),(\w+)\)\s+in\s+(\w+)/;//切割 (item,index) in list
+                    var params = attr.nodeValue.match(reg);
+                    var obj = self[params[3]];
+                    obj.forEach(function(item,index){
+                        console.log(node.children[0]);
+                        var temp = node.outerHTML.replace(new RegExp(params[2],"g"),index);
+                        console.log(temp);
+                    })
                 }
             })
         }

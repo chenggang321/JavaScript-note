@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<script>
+window.onload=function(){
+    var Vue=function(obj){
+        if(!(this instanceof Vue)){
+            return new Vue(obj);
+        }
+        this.$el=document.querySelector(obj.el);
+        this.$data=obj.data;
+        this.$method=obj.method;
+        this.render(this.$el,this.$data);
+    }  
+    Vue.prototype={
+        constructor:Vue,
+        //页面拆分
+        core:function(str){
+            var html=str;
+            var value="var arr=[];with(obj){arr.push('"
+                +html.replace(/[\n\r\t]/g," ")
+                .replace(/<!--(.*?)-->/g,"")
+                .replace(/\{\{(.*?)\}\}/g,"');arr.push($1);arr.push('")
+                +"');}return arr.join('');";
+            return new Function('obj',value);           
+        },
+        //模型分割
+        replace:function(str,ms,obj){
+            return str.replace(new RegExp("("+ms+"[\\w|\\.]+)","g"),function(match,$1){
+                var t=$1.split(".");
+                t.shift();
+                var result=obj;
+                for(var i=0;i<t.length;i++){
+                    if(undefined===result[t[i]]){
+                        return "";
+                    }
+                    result=result[t[i]];
+                }
+                return "'"+result+"'";
+            })
+        },
+        //模板渲染
+        template:function(elem,data){
+            console.log(elem,data);
+            var in_elem=elem.getElementsByTagName('*');
+            for(var i=0;i<in_elem.length;i++){
+                if(in_elem[i].getAttribute("v-for")){
+                    var reg1=/\((\w+),(\w+)\)\sin\s(\w+)/;
+                    var reg2=/(\w+)\sin\s(\w+)/
+                    var str=in_elem[i].getAttribute("v-for");
+                    var html="";
+                    var that=this;
+                    in_elem[i].removeAttribute('v-for');
+                    if(reg1.test(str)){
+                        var ms=str.match(reg1);
+                        var obj=data[ms[3]];
+                        obj.forEach(function(value,index){
+                            var temp=in_elem[i].outerHTML.replace(new RegExp(ms[2],"g"),index);
+                            html+=that.replace(temp,ms[1],obj[index]);
+                        })
+                        in_elem[i].outerHTML=html;
+                    }else if(reg2.test(str)){
+                        var ms=str.match(reg2);
+                        var obj=data[ms[2]];
+                        obj.forEach(function(value,index){
+                            var temp=in_elem[i].outerHTML;
+                            html+=that.replace(temp,ms[1],obj[index]);
+                        })
+                        in_elem[i].outerHTML=html;                       
+                    }
+                }
+            }
+            return this.core(elem.innerHTML)(data);
+        },
+        //页面渲染
+        render:function(elem,data){
+            var str=this.template(elem,data);
+            this.$el.innerHTML=str;
+        }
+    } 
+
+    var app=new Vue({
+        el:'#outdiv',
+        data:{
+            title:"标题",
+            smalltitle:"副标题",
+            list:[
+                {text1:'Athis is text1',text2:'Athis is text2'},
+                {text1:'Athis is text1',text2:'Athis is text2'},
+                {text1:'Athis is text1',text2:'Athis is text2'},
+                {text1:'Athis is text1',text2:'Athis is text2'},
+                {text1:'Athis is text1',text2:'Athis is text2'}
+            ]
+        }
+    })
+}
+</script>
+<body>
+<div id="outdiv">
+    <h1>{{title}}</h1>
+    <h2>{{smalltitle}}</h2>
+    <ul>
+        <li v-for="(value,index) in list">{{index}}{{"内容是:"+value.text1+value.text2}}{{index}}</li>
+    </ul>
+</div> 
+</body>
+</html>
