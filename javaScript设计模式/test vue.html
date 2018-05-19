@@ -53,6 +53,7 @@ window.onload=function(){
                     var str=in_elem[i].getAttribute("v-for");
                     var html="";
                     var that=this;
+                    console.log(this);
                     in_elem[i].removeAttribute('v-for');
                     if(reg1.test(str)){
                         var ms=str.match(reg1);

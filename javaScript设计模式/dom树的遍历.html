@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <span>aaaa</span>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>
+            <div>
+                <span>bbbb</span>
+                <span>cccc</span>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+<script>
+    //console.log(document.querySelector('#app'));
+    function DFSTraverse(rootNodes,rootLayer){
+        var roots = Array.from(rootNodes);
+        while(roots.length){
+            var root = roots.shift();
+            console.log(root,rootLayer);
+            if(root.children.length){
+                DFSTraverse(root.children,rootLayer+1);
+            }
+        }
+    }
+   // DFSTraverse(document.querySelectorAll('#app'),1);
+
+    const BFSTraverse = (rootNodes, rootLayer) => {
+        const roots = Array.from(rootNodes)
+        const rootsLayer = [] // 单用一个数组存放每个节点的的层级
+        // 初始化
+        for (let i = 0; i < roots.length; i++) {
+            rootsLayer.push(rootLayer)
+        }
+        var rootIdx = 0 // 记录当前处理roots中的第几个节点，方便查找rootsLayer中对应的层级
+        while (roots.length) {
+            const root = roots.shift() // 出队
+            console.log(root, rootsLayer[rootIdx])
+            // 如果有子节点，将子节点放到roots队列中
+            if (root.children.length) {
+                Array.prototype.push.apply(roots, Array.from(root.children))
+                // 将当前层级加1得到子节点的层级
+                rootLayer = rootsLayer[rootIdx] + 1
+                for (let i = 0; i < root.children.length; i++) {
+                    rootsLayer.push(rootLayer)
+                }
+            }
+            // 处理下一个root节点
+            rootIdx++
+        }
+    }
+    BFSTraverse(document.querySelectorAll('#app'),1);
+</script>
+</html>

@@ -34,22 +34,17 @@ var View = {
         ViewModel.bind(Model);
         //解析Dom
         this.processNode(el);
+        console.log(this);
     },
     subs:[],
     processNode:function(el){
         var node = document.querySelector(el);
-        /*var frag = document.createDocumentFragment(),child;
+        var frag = document.createDocumentFragment(),child;
         while(child = node.firstChild){
-            console.log(child);
             this.compile(child);
             frag.appendChild(child);
         }
-        node.appendChild(frag);*/
-        var in_elem=node.getElementsByTagName('*');
-        console.log(in_elem);
-        [...in_elem].forEach(function(elem){
-            this.compile(elem);
-        })
+        node.appendChild(frag);
     },
     compile:function(node){
         function Sub(node,name,nodeType){
@@ -79,32 +74,41 @@ var View = {
                     self.subs.push(sub);
                 }
                 if(attr.nodeName === 'v-for'){
-                    console.log(attr.nodeValue);
                     var reg = /\((\w+),(\w+)\)\s+in\s+(\w+)/;//切割 (item,index) in list
                     var params = attr.nodeValue.match(reg);
-                    var obj = self[params[3]];
-                    obj.forEach(function(item,index){
-                        console.log(node.children[0]);
-                        var temp = node.outerHTML.replace(new RegExp(params[2],"g"),index);
-                        console.log(temp);
-                    })
+                    var forSub = new Sub(node,params[3] ,'v-for');
+                    forSub.childrenText = node.innerHTML;
+                    self.render(forSub);
+                    self.subs.push(forSub);
+                    node.removeAttribute('v-for');
                 }
             })
         }
         if(node.nodeType === 3){
-            if(/\{\{(.*)\}\}/.test(node.nodeValue)){
-                var name = RegExp.$1;
-                name=name.trim();
-                var sub = new Sub(node,name,'text');
-                self.render(sub);
-                self.subs.push(sub);
+            if(/\{\{(.*)\}\}/g.test(node.nodeValue)){
+                var subAttrs = node.parentNode.parentNode.attributes;
+                var flag = true;
+                [...subAttrs].forEach(function(attr){
+                    if((attr.nodeName === 'v-for')){
+                        flag = false;
+                    }
+                });
+                if(flag){
+                    var name = RegExp.$1;
+                    name=name.trim();
+                    var sub = new Sub(node,name,'text');
+                    self.render(sub);
+                    self.subs.push(sub);
+                }
             }
         }
     },
-    update:function(){
+    update:function(key){
         var self = this;
         this.subs.forEach(function(sub){
-            self.render(sub);
+            if(sub.name === key){
+                self.render(sub);
+            }
         })
     },
     render:function(sub){
@@ -113,6 +117,25 @@ var View = {
         }
         if(sub.nodeType === 'text'){
             sub.node.nodeValue=this[sub.name];
+        }
+        if(sub.nodeType === 'v-for'){
+            var data = this[sub.name];
+            var node = sub.node;
+            var html = '';
+            data.forEach(function(item,index){
+                html += sub.childrenText.replace(/\{\{[^(\}\})]+\}\}/g,function(str){
+                    if(/\{\{(.*)\}\}/g.test(str)){
+                        if(RegExp.$1 === 'index'){
+                            return  index
+                        }else{
+                            var param = RegExp.$1.split('.')[1];
+                            return item[param]
+                        }
+                    }
+                });
+            });
+            console.log(html);
+            node.innerHTML = html;
         }
     }
 };
@@ -125,7 +148,8 @@ var ViewModel={
                 },
                 set:function(newVal){
                     m[key] = newVal;
-                    this.update();
+                    this.update(key);
+                    console.log('set'+key);
                 }
             })
         });
