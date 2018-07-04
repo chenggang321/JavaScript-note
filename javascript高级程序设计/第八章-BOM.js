@@ -33,8 +33,8 @@
 // 获取页面视口大小
 var pageWidth = window.innerWidth,
     pageHeight = window.innerHeight;
-if (typeof pageWidth !== "number"){
-    if (document.compatMode === "CSS1Compat"){//是否处于标准模式
+if (typeof pageWidth !== "number") {
+    if (document.compatMode === "CSS1Compat") {//是否处于标准模式
         pageWidth = document.documentElement.clientWidth;
         pageHeight = document.documentElement.clientHeight;
     } else {
@@ -73,3 +73,62 @@ if (typeof pageWidth !== "number"){
 // 入框、取消、确认)
 
 // location 对象
+/*
+* location对象的所有属性
+* hash  '#contents' 返回URL中的hash（#号后跟零或多个字符），如果URL中不包含散列，
+* 则返回空字符串
+* host  'www.wrox.com:80' 返回服务器名称和端口号（如果有）
+* hostname  'www.wrox.com' 返回不带端口号的服务名称
+* href  'http:/www.wrox.com' 返回当前加载页面的完整URL。而location对象的toString（）
+* 方法也返回这个值
+* pathname '/WileyCDA/'  返回URL中的目录和（或）文件名
+* port  '8080'  返回URL中指定的端口号。如果URL中不包含端口号，则这个属性返回空字符串
+* protocol  'http'  返回页面使用的协议。通常是http：或https:
+* search  '?q=javascript'  返回URL的查询字符串。这个字符串以问号开头
+* */
+
+// 查询字符串参数
+function getQueryStringArgs() {
+    //查询字符串并去掉开头的问号
+    var qs = (location.search.length > 0 ? location.search.substring(1) : ""),
+        // 保存数据的对象
+        args = {},
+        //取得每一项
+        items = qs.length ? qs.split("&") : [],
+        item = null,
+        name = null,
+        value = null,
+        //在for循环中使用
+        i = 0,
+        len = items.length;
+    //逐个将每一项添加到args对象中
+    for (; i < len; i++) {
+        item = items[i].split("=");
+        name = decodeURIComponent(item[0]);
+        value = decodeURIComponent(item[1]);
+        if (name.length) {
+            args[name] = value;
+        }
+    }
+    return args;
+}
+
+// 位置操作
+// location.assign()
+// location.href
+// window.location
+// location.replace() 浏览器位置改变，但不会在历史记录中生成新记录。所以跳转后不能后退
+
+// navigator 用于检测浏览器类型
+
+// 检测插件
+
+// screen 对象表明客户端的能力
+
+// history 对象
+/*
+*history.go()可以在历史记录中任意跳转
+*history.back() 后退
+* history.forward() 前进
+* history.length 历史记录的数量
+* */
