@@ -38,8 +38,8 @@
 * clientHeight
 * */
 
-function getViewport(){
-    if (document.compatMode === "BackCompat"){
+function getViewport() {
+    if (document.compatMode === "BackCompat") {
         return {
             width: document.body.clientWidth,
             height: document.body.clientHeight
@@ -51,6 +51,7 @@ function getViewport(){
         };
     }
 }
+
 // 与偏移量相似，客户区打小也是只读的，每次访问要重新计算
 
 // 滚动大小（包含滚动内容的元素大小）隐藏部分也包含在内
@@ -65,12 +66,13 @@ var docHeight = Math.max(document.documentElement.scrollHeight,
     document.documentElement.clientHeight);
 var docWidth = Math.max(document.documentElement.scrollWidth,
     document.documentElement.clientWidth);
+
 // 获取元素大小（跨浏览器）
-function getBoundingClientRect(element){
+function getBoundingClientRect(element) {
     var scrollTop = document.documentElement.scrollTop;
     var scrollLeft = document.documentElement.scrollLeft;
-    if (element.getBoundingClientRect){
-        if (typeof arguments.callee.offset != "number"){
+    if (element.getBoundingClientRect) {
+        if (typeof arguments.callee.offset != "number") {
             var temp = document.createElement("div");
             temp.style.cssText = "position:absolute;left:0;top:0;";
             document.body.appendChild(temp);
@@ -97,6 +99,7 @@ function getBoundingClientRect(element){
         }
     }
 }
+
 // 遍历
 // document.createNodeIterator()
 // NodeIterator
@@ -113,15 +116,41 @@ function getBoundingClientRect(element){
 *   NodeFilter.SHOW_COMMENT 注释节点
 *   NodeFilter.SHOW_DOCUMENT 文档节点
 *   NodeFilter.SHOW_DOCUMENT_TYPE 文档类型节点
+*   nextNode()
+*   previousNode()
 * */
+// 插入测试dom
+var html = `
+<div id="div1">
+    <p><b>Hello</b> world!</p>
+    <ul>
+        <li>List item 1</li>
+        <li>List item 2</li>
+        <li>List item 3</li>
+    </ul>
+</div>
+`
+document.body.innerHTML = html
+/*var root = document
 var filter = {
     acceptNode: function(node){
-        return node.tagName.toLowerCase() === "p" ?NodeFilter.FILTER_ACCEPT :
-            NodeFilter.FILTER_SKIP;
+        return node.tagName.toLowerCase() === "p" ?
+            NodeFilter.FILTER_ACCEPT :
+                NodeFilter.FILTER_SKIP;
     }
 };
 var iterator = document.createNodeIterator(root, NodeFilter.SHOW_ELEMENT,
     filter, false);
+
+console.log(iterator.nextNode())
+console.log(iterator.previousNode())*/
+var div = document.getElementById('div1')
+var iterator = document.createNodeIterator(div, NodeFilter.SHOW_ELEMENT, null, false)
+var node = iterator.nextNode()
+while (node !== null) {
+    console.log(node.tagName)
+    node = iterator.nextNode()
+}
 
 // TreeWalker
 /*
@@ -132,16 +161,83 @@ var iterator = document.createNodeIterator(root, NodeFilter.SHOW_ELEMENT,
 * previousSibling()
 * */
 
-var div = document.getElementById("div1");
-var Filter = function(node){
-    return node.tagName.toLowerCase() === "li"?
-        NodeFilter.FILTER_ACCEPT :
-        NodeFilter.FILTER_SKIP;
-};
-var walker= document.createTreeWalker(div, NodeFilter.SHOW_ELEMENT,
-    Filter, false);
-var node = iterator.nextNode();
-while (node !== null) {
-    alert(node.tagName); //?????
-    node = iterator.nextNode();
+var div2 = document.getElementById("div1");
+var walker = document.createTreeWalker(div2, NodeFilter.SHOW_ELEMENT,
+    null, false);
+walker.firstChild(); // 到p
+walker.nextSibling(); // 到ul
+var node2 = walker.firstChild(); // 第一个li
+while (node2 !== null) {
+    console.log(node2.tagName); //输出标签名
+    node2 = walker.nextSibling();
 }
+
+// dom中的范围
+// 检测 是否支持dom2
+var supportsRange = document.implementation.hasFeature("Range", "2.0");
+var alsoSupportsRange = (typeof document.createRange === "function");
+// 创建
+// var range = document.createRange();
+// 方法
+/*
+* startContainer 包含范围的起点
+* startOffset 范围在startContainer中起点的偏移量
+* endContainer 包含范围终点的节点
+* endOffset 范围在endContainer中终点的偏移量
+* commonAncestorContainer startContainer、endContainer共同祖先在文档树中位置最深的那个
+* */
+
+// 用都没范围实现简单选择
+/*
+* selectNode() 整个节点
+* selectNodeContents() 节点的子节点
+* 接收一个dom节点，用节点中的信息填充范围
+* */
+var range1 = document.createRange(),
+range2 = document.createRange();
+range1.selectNode(div2)
+range2.selectNodeContents(div2)
+console.log(range1,range2)
+// 方法
+/*
+* setStartBefore(refNode)
+* setStartAfter(refNode)
+* setEndBefore(refNode)
+* setEndAfter(refNode)
+* */
+
+// 用dom范围实现复杂选择
+/*
+*  setStart()
+*  setEnd()
+*  接收节点和偏移量值，setStart节点变成startContainer 偏移量变成startOffset  setEnd类似
+* */
+
+// 操作DOM范围中的内容
+
+/*
+* deleteContents() 删除
+* extractContents() 删除并返回删除值
+* cloneContents() 创建对象复本
+* insertNode() 插入
+* */
+
+// 折叠DOM范围
+//  collapse()
+
+// 比较DOM范围
+// compareBoundaryPoints()
+/*
+*  Range.START_TO_START(0)
+*  Range.START_TO_END(1)
+*  Range.END_TO_END(2)
+*  Range.END_TO_START(3)
+* */
+
+// 复制DOM范围
+//  cloneRange()
+
+// 清除DOM范围
+// detach()
+
+
