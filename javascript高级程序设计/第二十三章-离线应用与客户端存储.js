@@ -109,3 +109,51 @@ CookieUtil.set("name", "Nicholas", "/books/projs/", "www.wrox.com",
 CookieUtil.unset("name", "/books/projs/", "www.wrox.com");
 //设置安全的cookie
 CookieUtil.set("name", "Nicholas", null, null, null, true);
+
+// web存储机制
+// Storage 类型
+/*
+*  clear() 删除所有值
+*  getItem(name) 根据指定的名字name获取对应的值
+*  key(index) 获得index位置处的值的名字
+*  removeItem(name) 删除由name指定的名字的值
+*  key(index) 获得index位置处的值的名字
+*  setItem(name,value) 为指定的name设置一个对应的值
+* */
+
+// sessionStorage 对象
+/*
+* 存储特定于某个会话的数据，也就是该数据只保持到浏览器关闭。是Storage的一个实例
+* */
+
+//globalStorage
+//localStorage
+/*
+* 数据保留到通过javascript删除或者是用户清除浏览器缓存
+* */
+
+// 为了兼容只支持globalStorage的浏览器
+function getLocalStorage(){
+    if (typeof localStorage === "object"){
+        return localStorage;
+    } else if (typeof globalStorage === "object"){
+        return globalStorage[location.host];
+    } else {
+        throw new Error("Local storage not available.");
+    }
+}
+
+// storage 事件
+/*
+*  domain 发生变化的存储空间的域名
+*  key 设置或删除的键名
+*  newValue 如果是设置值，则是新值；如果是删除键，则是null
+*  oldValue 键被更改之前的值
+* */
+// 限制
+// 对于localStorage,大多数桌面浏览器会设置来源5MB的限制，chrome和Safari对每个来源的限制
+// 是2.5MB.ios 和 Android 版的限制也是2.5MB
+
+// indexedDB
+
+
