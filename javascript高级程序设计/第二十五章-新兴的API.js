@@ -90,7 +90,7 @@ div.addEventListener('drag',dargmove)
 div.addEventListener('dragend', dargend)
 
 // 拖拽ajax上传
-var droptarget = document.getElementById("droptarget");
+/*var droptarget = document.getElementById("droptarget");
 function handleEvent(event){
     var info = "",
         output = document.getElementById("output"),
@@ -118,9 +118,13 @@ function handleEvent(event){
 }
 EventUtil.addHandler(droptarget, "dragenter", handleEvent);
 EventUtil.addHandler(droptarget, "dragover", handleEvent);
-EventUtil.addHandler(droptarget, "drop", handleEvent);
+EventUtil.addHandler(droptarget, "drop", handleEvent);*/
 
 // web 计时
 
 // web worker
+var option = 'name'
+var object = {[option]:'aaa'}
+console.log(object)
+
 
