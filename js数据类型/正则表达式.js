@@ -113,3 +113,20 @@
 // 如果存在则返回true，否则返回false)
 // exec() (使用正则表达式模式对字符串执行搜索，并将匹配到的结果以数组形式返回，
 // 如果没有匹配，返回null)
+
+// 应用-正则格式化日期
+function formDate(str,sign){
+    let start = 0,
+        reg = /(yy)|(yyyy)|(MM)|(dd)|(hh)|(mm)|(ss)/g;
+    sign.replace(reg,function(match){
+        let end = start+match.length,
+            strDate = str.substring(start,end);
+        start = end;
+        sign = sign.replace(match,strDate);
+    });
+    return sign
+}
+console.log(formDate("20180913000000",'yyyy-MM-dd hh:mm:ss'));
+console.log(formDate("20180818172930",'yyyy/MM/dd hh:mm:ss'));
+console.log(formDate("180818172930",'yy/MM/dd hh:mm:ss'));
+console.log(formDate("20180818172930",'今天是yyyy年MM月dd日 hh:mm:ss'));

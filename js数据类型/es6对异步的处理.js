@@ -50,7 +50,7 @@ function run(fn){
     next();
 }
 
-// run(task);
+run(task);
 
 
 // 模拟异步进程
