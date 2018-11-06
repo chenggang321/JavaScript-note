@@ -165,19 +165,3 @@ function desc(arr){
     });
 }
 console.log(desc([4,3,2,5]));//[5,4,3,2]
-
-// 冒泡排序
-function bubbleSort(arr){
-    var len = arr.length;//4
-    for(var i = 0;i<len;i++){ // 层的循环
-        for(var j = 0;j < len-1-i;j++){ // 元素循环
-            if(arr[j]>arr[j+1]){ // 交换条件
-                var temp = arr[j+1]; // 交换
-                arr[j+1] = arr[j];
-                arr[j] = temp;
-            }
-        }
-    }
-    return arr;
-}
-console.log(bubbleSort([6,2,3,4]));
