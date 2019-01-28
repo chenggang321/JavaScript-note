@@ -35,3 +35,55 @@ var InputStrategy = function () {
         }
     }
 };
+
+// 策略模式应用 减少大量判断语句
+/*
+*  例如 绩效考核的问题 绩效为A的人年终奖为工资的4倍
+*                     绩效为B的人年终奖为工资的3倍
+*                     绩效为C的人年终奖为工资的2倍
+* */
+// 一般的编码方式
+var calculateBouns = function (salary,level) {
+    if(level === 'A'){
+        return salary * 4;
+    }
+    if(level === 'B'){
+        return salary * 3;
+    }
+    if(level === 'C'){
+        return salary * 2;
+    }
+}
+
+// 这样写的缺点
+// 1. 有大量的if语句
+// 2. 函数不可扩展
+// 3. 函数不能复用
+
+// 使用策略模式重构
+var performance = {
+    /**
+     * @return {number}
+     */
+    A:function(salary){
+        return salary * 4;
+    },
+    /**
+     * @return {number}
+     */
+    B:function(salary){
+        return salary * 3
+    },
+    /**
+     * @return {number}
+     */
+    C:function(salary){
+        return salary * 2;
+    }
+};
+var calculateBouns02 = function(level,salary){
+    return performance[level](salary)
+};
+
+
+
