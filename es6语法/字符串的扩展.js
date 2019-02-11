@@ -117,7 +117,6 @@ function compile(template) {
 
     return output;
   })`;
-
     return script;
 }
 
