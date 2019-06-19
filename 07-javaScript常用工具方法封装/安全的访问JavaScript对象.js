@@ -84,10 +84,15 @@ const userList = [
 
 // 使用数组reduce访问嵌套对象
 const getSaveObj = (obj,pathArr) => {
-    return pathArr.reduce((item, key) =>
-        (item && item[key] !== 'undefined') ? item[key] : null, obj);
+    return pathArr.reduce((item, key) =>{
+        return (item && item[key] !== 'undefined') ? item[key] : null
+    }, obj);
 }
 
 const city = getSaveObj(user, ['info', 'address','city']);
+console.log(city);
+
+const city02 = getSaveObj(userList,[2,'info','address','city']);
+console.log(city02);
 
 
