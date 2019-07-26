@@ -91,8 +91,3 @@ const getSaveObj = (obj,pathArr) => {
 
 const city = getSaveObj(user, ['info', 'address','city']);
 console.log(city);
-
-const city02 = getSaveObj(userList,[2,'info','address','city']);
-console.log(city02);
-
-
