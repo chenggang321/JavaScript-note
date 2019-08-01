@@ -105,3 +105,101 @@ marry
     .goes()//执行动作
     .change('shoot')//添加射击动作
     .goes();//执行动作
+
+// 状态机
+// 枚举
+const enumState = {
+    ONE:'状态ONE',
+    TWO:'状态TWO',
+    THREE:'状态THREE',
+}
+
+// 抽象方法
+class state{
+    // 提交
+    submit(){
+        throw new Error('不能调用抽象类方法')
+    }
+    // 退回
+    back(){
+        throw new Error('不能调用抽象类方法')
+    }
+    // 获取当前状态
+    getState(){
+        throw new Error('不能调用抽象类方法')
+    }
+}
+
+// 状态管理类
+class StateManage{
+    constructor(state){
+        this.state = state
+    }
+    setState(state){
+        this.state = state
+    }
+    getState(){
+        return this.state
+    }
+    submit(){
+        this.state.submit(this);
+        return this;
+    }
+    back(){
+        this.state.back(this);
+        return this;
+    }
+}
+
+// 实现方法
+class OneState extends state{
+    submit(stateManage) {
+        console.log('状态设置为TWO,当前状态为'+this.getState());
+        stateManage.setState(new TowState());
+    }
+    back(stateManage) {
+        console.log('已是最顶层状态ONE,当前状态为'+this.getState());
+    }
+    getState() {
+        return enumState.ONE
+    }
+}
+
+class TowState extends state{
+    submit(stateManage) {
+        console.log('状态设置为THREE,当前状态为'+this.getState());
+        stateManage.setState(new ThreeState());
+    }
+    back(stateManage) {
+        console.log('转态回到ONE,当前状态为'+this.getState());
+        stateManage.setState(new OneState());
+    }
+    getState() {
+        return enumState.TWO
+    }
+}
+
+class ThreeState extends state{
+    submit(stateManage) {
+        console.log('已是最底层THREE,当前状态为'+this.getState());
+    }
+    back(stateManage) {
+        console.log('转态回到TWO,当前状态为'+this.getState());
+        stateManage.setState(new TowState());
+    }
+    getState() {
+        return enumState.THREE
+    }
+}
+
+let stateManage = new StateManage(new OneState);
+    stateManage
+        .submit() // 状态设置为TWO,当前状态为状态ONE
+        .submit() // 状态设置为THREE,当前状态为状态TWO
+        .submit() // 已是最底层THREE,当前状态为状态THREE
+        .submit() // 已是最底层THREE,当前状态为状态THREE
+        .back() // 转态回到TWO,当前状态为状态THREE
+        .back() // 转态回到ONE,当前状态为状态TWO
+        .back() // 已是最顶层状态ONE,当前状态为状态ONE
+        .back(); // 已是最顶层状态ONE,当前状态为状态ONE
+
