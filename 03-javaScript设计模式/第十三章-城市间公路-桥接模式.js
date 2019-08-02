@@ -5,6 +5,13 @@
 * 桥接模式：在系统沿着多个维度变化的同时，又不增加其复杂度并已达到解耦。
 * 有时候页面中的一些小小细节改变常因逻辑相似导致大片臃肿的代码，让页面苦涩不
 * 堪。
+*
+* 桥接模式将抽象部分和具体实现部分分离，两者可独立变化，也可一起工作。
+* 这种模式的实现上，需要一个对象担任桥的角色，起到连接作用。
+*
+* 应用：在封装开源组件的时候，经常会用到这种模式。例如：各种框架的暴露的
+* 生命周期
+*
 * */
 //多维变量类
 //运动单元
@@ -58,4 +65,17 @@ People.prototype.init=function(){
     this.speed.run();
     this.font.say();
 };
+console.log('success');
+// 桥接模式的典型应用是Array上的forEach函数
+// 此函数负责遍历数组中的每个元素，是抽象部分；而回调函数就是具体部分
+const forEach = (arr,callback)=>{
+    if(!Array.isArray(arr)) return false;
+    for(let i = 0;i<arr.length;i++){
+        callback(arr[i],i);
+    }
+};
+
+forEach(arr,(item,index)=>{
+    console.log(item,index);
+})
 
