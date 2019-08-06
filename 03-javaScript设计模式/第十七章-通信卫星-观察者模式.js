@@ -56,20 +56,72 @@ var Observer = (function () {
         }
     }
 })();
-function show(e){
+
+function show(e) {
     console.log(e.type, e.args.msg);
 }
+
 Observer //注册接口 test test1
     .regist('test', show)
     .regist('test1', show);
-Observer.remove('test',show);//注销接口test
+Observer.remove('test', show);//注销接口test
 Observer //执行接口 test test1
     .fire('test', {msg: '传递参数'})
     .fire('test1', {msg: '传递参数1'});//test1 传递参数1
+
+/*
+*  es6 改写
+* */
+class ObserverEs6 {
+    constructor() {
+        this.__messages = {}
+    }
+
+    // 注册事件
+    regist(type, fn) {
+        if (typeof this.__messages[type] === 'undefined') {
+            this.__messages[type] = [fn]
+        } else {
+            this.__messages[type].push(fn);
+        }
+        return this
+    }
+
+    // 移除事件
+    remove(type, fn) {
+        if (this.__messages[type] instanceof Array) {
+            this.__messages[type].forEach((item, index) => {
+                item === fn && this.__messages[type].splice(index, 1)
+            })
+        }
+        return this;
+    }
+
+    // 执行某个类型所有注册事件
+    fire(type, args = {}) {
+        if (!this.__messages[type]) return false;
+        let events = {type, args};
+        this.__messages[type].forEach((item) => {
+            item.call(this, events);
+        });
+        return this;
+    }
+}
+
+const observerEs6 = new ObserverEs6();
+observerEs6 //注册接口 test test1
+    .regist('test', show)
+    .regist('test1', show);
+observerEs6.remove('test', show);//注销接口test
+observerEs6 //执行接口 test test1
+    .fire('test', {msg: '传递参数'})
+    .fire('test1', {msg: '传递参数1'});//test1 传递参数1
+
 //外观模式 简化获取元素
 function $(id) {
     return document.getElementById(id);
 }
+
 (function () {
     var html = `
     <div class="container">
@@ -97,7 +149,7 @@ function $(id) {
         span.onclick = function () {
             ul.removeChild(li);//移出留言
             //发布删除留言信息
-            Observer.fire('removeCommentMessage', {
+            observerEs6.fire('removeCommentMessage', {
                 num: -1
             });
         };
@@ -108,7 +160,7 @@ function $(id) {
     }
 
     //注册添加评论信息
-    Observer.regist('addCommentMessage', addMsgItem);
+    observerEs6.regist('addCommentMessage', addMsgItem);
 })();
 //工程师B
 (function () {
@@ -121,7 +173,7 @@ function $(id) {
     }
 
     //注册添加评论信息
-    Observer
+    observerEs6
         .regist('addCommentMessage', changgeMesNum)
         .regist('removeCommentMessage', changgeMesNum);
 })();
@@ -136,10 +188,11 @@ function $(id) {
             return;
         }
         //发布则评论消息
-        Observer.fire('addCommentMessage', {
+        observerEs6.fire('addCommentMessage', {
             text: text.value,//消息评论内容
             num: 1//消息评论数目
         });
         text.value = '';//将输入框置为空
     }
 })();
+
