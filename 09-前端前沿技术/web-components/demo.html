@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="custom-element.js" defer></script>
+    <script src="shadow-dom.js" defer></script>
+    <script src="templates-demo.js"></script>
+</head>
+<body>
+<template id="my-paragraph">
+    <style>
+        .c-red {
+            color: #f00;
+        }
+    </style>
+    <p class="c-red">My paragraph</p>
+    <slot name="my-text"></slot>
+</template>
+<hello-world>click</hello-world>
+<shadow-dom-demo></shadow-dom-demo>
+<my-paragraph>
+    <span slot="my-text">this is slot</span>
+</my-paragraph>
+<my-paragraph>
+    <span slot="my-text">this is different slot</span>
+</my-paragraph>
+</body>
+</html>
