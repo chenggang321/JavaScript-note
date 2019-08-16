@@ -136,6 +136,24 @@ class BSTree {
         }
     }
 
+    // 层次遍历
+    levelOrder(node){
+        if(!node) return [];
+        let result = [], queue = [];
+        queue.push(node);
+        while(true){
+            let len = queue.length, arr = [];
+            while(len > 0){
+                let node = queue.shift()
+                len -= 1
+                arr.push(node.key)
+                if(node.left !== null) queue.push(node.left)
+                if(node.right !== null) queue.push(node.right)
+            }
+            if(arr.length === 0) return result
+            result.push([...arr])
+        }
+    }
 
     // 查找最小值
     getMin() {
@@ -262,6 +280,7 @@ tree.postOrder(tree.root); // 3 22 16 37 99 45 23
 console.log("---------------------------------------------------");
 tree.postOrderStack(tree.root); // 3 22 16 37 99 45 23
 
+console.log(tree.levelOrder(tree.root)); // [['23'],['16','45],['3','22','37','99']]
 // 最小值
 console.log('min:' + tree.getMin());  // min : 3
 
