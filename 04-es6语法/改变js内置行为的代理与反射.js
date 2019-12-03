@@ -21,12 +21,12 @@ let target = {};
 let proxy = new Proxy(target,{});
 
 proxy.name = 'hello';
-console.log(proxy.name); // hello
-console.log(target.name); // hello
+// console.log(proxy.name); // hello
+// console.log(target.name); // hello
 
 target.name = 'world';
-console.log(proxy.name); // world
-console.log(target.name); // world
+// console.log(proxy.name); // world
+// console.log(target.name); // world
 
 // 定义一个或多个陷阱函数
 
@@ -58,8 +58,8 @@ function set(trapTarget,key,value,receiver){
 
 // 测试
 proxyObj.count = 123;
-console.log(proxyObj.count); // 123
-console.log(targetObj.count); // 123
+// console.log(proxyObj.count); // 123
+// console.log(targetObj.count); // 123
 
 // proxyObj.anotherName = "proxy" // TypeError: Property anotherName must be a number.
 
@@ -72,5 +72,41 @@ function get(trapTarget,key,receiver){
     return Reflect.get(trapTarget,key,receiver)
 }
 
-console.log(proxyObj.count); // 123
+// console.log(proxyObj.count); // 123
 // console.log(proxyObj.newcount) // TypeError: Property newcount doesn't exist.
+
+// 实现mvvm
+
+// 存储数据
+let store = new Map();
+
+let test = {
+    a:'1',
+    b:'2'
+}
+
+let pTest =  reactive(test);
+
+pTest.a = 2;
+
+console.log(pTest.a);
+
+
+function reactive(obj){
+    const proxied = new Proxy(obj,{
+        get:(target,key,receiver)=>{
+            console.log('get')
+            console.log(target,key,receiver);
+            console.log(Reflect.get(target,key,receiver));
+            return Reflect.get(target,key,receiver)
+        },
+        set:(target,key,value,receiver)=>{
+            console.log('set');
+            console.log(target,key,receiver);
+            const result = Reflect.set(target, key, value, receiver);
+            return result
+        }
+    })
+
+    return proxied
+}
