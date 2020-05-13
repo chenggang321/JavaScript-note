@@ -429,3 +429,21 @@ const permutations = arr => {
 const reducedFilter = (data, keys, fn) => data.filter(fn)
     .map(el => keys.reduce((acc, key) => (acc[key] = el[key], acc), {}));
 // reducedFilter(data, ['id', 'name'], item => item.age > 24); // [{ id: 2, name: 'mike'}]
+
+/**
+ *  修改特定元素位置
+ * @param arr
+ * @param fn
+ * @param sortIndex
+ * @returns {T[] | BigUint64Array | Uint8ClampedArray | Uint32Array | Blob | Int16Array | Float64Array | SharedArrayBuffer | string | Uint16Array | ArrayBuffer | Int32Array | Float32Array | BigInt64Array | Uint8Array | Int8Array}
+ */
+const replaceBySortIndex = (arr,fn, sortIndex) =>  {
+    const filterObj = arr.map((item,index) => ({...item,item,index})).filter(fn).pop();
+    arr = arr.slice(0);
+    arr.splice(filterObj.index,1);
+    arr.splice(sortIndex,0,filterObj.item);
+    return arr;
+}
+
+const data = [{key:1,value:'aaa'},{key:2,value:'ccc'},{key:3,value:'ddd'},{key:13,value:'eee'}];
+console.log(replaceBySortIndex(data, item => item.key === 2, 0));
