@@ -1,0 +1,11 @@
+$base-time: 1s / 30;
+$base-prec: 100% / 30;
+
+@mixin animationFn($name, $duration, $delay) {
+  opacity: 0;
+  animation-name: $name;
+  animation-duration: $base-time * $duration;
+  animation-name: $name;
+  animation-delay: $base-time * $delay;
+  animation-fill-mode: forwards;
+}

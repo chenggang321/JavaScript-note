@@ -1,0 +1,141 @@
+@import './mixin.scss';
+.dhr-home-page .item-list {
+  .ai-bannel {
+    height: 675px;
+    background: #fff;
+    padding-top: 111px;
+    .title-sub {
+      font-size: 24px;
+      margin-top: 20px;
+      margin-bottom: 80px;
+      color: #111111;
+      letter-spacing: 6.2px;
+      text-align: center;
+      line-height: 24px;
+    }
+    .content {
+      text-align: center;
+      & > div {
+        width: 330px;
+        display: inline-block;
+        & > div {
+          display: inline-block;
+        }
+        &:nth-child(2) {
+          // margin: 0 90px;
+          margin-left: calc(50% - 495px);
+          margin-right: calc(50% - 495px);
+        }
+      }
+      &-image {
+        width: 170px;
+        height: 170px;
+        img {
+          width: inherit;
+          height: inherit;
+        }
+      }
+      &-title {
+        font-size: 20px;
+        color: #111111;
+        letter-spacing: 2px;
+        text-align: center;
+        line-height: 20px;
+        font-weight: bold;
+        width: 100%;
+        margin-top: 30px;
+        margin-bottom: 20px;
+      }
+      &-desc {
+        font-size: 14px;
+        color: #111111;
+        letter-spacing: 0;
+        text-align: center;
+        line-height: 22px;
+      }
+    }
+  }
+  .item.action .ai-bannel {
+    .title {
+      @include animationFn(aibannel-title, 18, 0);
+    }
+    .title-sub {
+      @include animationFn(aibannel-sub-title, 14, 4);
+    }
+    .content > div {
+      &:first-child {
+        @include animationFn(ai-bannel-content, 10, 10);
+        .content-title,
+        .content-desc {
+          @include animationFn(ai-bannel-content-title, 10, 11);
+        }
+      }
+      &:nth-child(2) {
+        @include animationFn(ai-bannel-content, 10, 11);
+        .content-title,
+        .content-desc {
+          @include animationFn(ai-bannel-content-title, 10, 12);
+        }
+      }
+      &:last-child {
+        @include animationFn(ai-bannel-content, 10, 13);
+        .content-title,
+        .content-desc {
+          @include animationFn(ai-bannel-content-title, 10, 14);
+        }
+      }
+    }
+  }
+}
+
+@keyframes aibannel-title {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -90px, 0);
+  }
+  22% {
+    opacity: 0;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+@keyframes aibannel-sub-title {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 50px, 0);
+  }
+  29% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+
+@keyframes ai-bannel-content {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}
+
+@keyframes ai-bannel-content-title {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 40px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}

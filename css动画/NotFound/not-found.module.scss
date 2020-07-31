@@ -1,0 +1,31 @@
+.main {
+  height: 100%;
+  position: relative;
+}
+
+.content {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  pointer-events: none;
+}
+
+.title {
+  font-size: 80px;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+
+.des {
+  line-height: 1;
+  font-size: 16px;
+  margin-bottom: 26px;
+}
+
+.img {
+  width: 630px;
+  height: 435px;
+  background: url('./404.png') 100% / 100%;
+}

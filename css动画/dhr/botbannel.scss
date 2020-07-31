@@ -1,0 +1,180 @@
+@import './mixin.scss';
+
+.dhr-home-page .item-list {
+  .bot-bannel {
+    height: 600px;
+    background: #fff;
+    border-bottom: 1px solid #f2f6fa;
+    & > div {
+      display: inline-block;
+    }
+    .bannel-left {
+      padding-top: 183px;
+      float: right;
+      text-align: left;
+      height: 100%;
+      box-sizing: border-box;
+      min-width: 371px;
+      max-width: 432px;
+      width: calc(100% - 926px);
+      .title {
+        text-align: left;
+        letter-spacing: 2px;
+      }
+      .title-sub {
+        font-size: 32px;
+        width: 342px;
+        color: #111111;
+        letter-spacing: 6px;
+        line-height: 48px;
+        margin-top: 50px;
+        margin-bottom: 30px;
+      }
+    }
+    .content {
+      max-width: 926px;
+      width: calc(100% - 372px);
+      height: inherit;
+      border-left: 1px solid #f2f6fa;
+      text-align: left;
+      float: right;
+      & > div {
+        width: calc((100% - 3px) / 3);
+        display: inline-block;
+        height: inherit;
+        background-color: #fff;
+        top: 0px;
+        transition: box-shadow 0.2s linear, height 0.2s linear,
+        top 0.2s linear;
+        & > div {
+          margin-left: auto;
+          margin-right: auto;
+          width: 200px;
+        }
+        &.active {
+          box-shadow: 0 14px 50px 0 rgba(0, 15, 85, 0.12);
+          height: calc(100% + 20px);
+          top: -10px;
+          z-index: 1;
+        }
+        &:nth-child(2) {
+          border-right: 1px solid #f2f6fa;
+          border-left: 1px solid #f2f6fa;
+        }
+        &:last-child {
+          border-right: 1px solid #f2f6fa;
+        }
+      }
+      &-image {
+        height: 200px;
+        width: 200px;
+        margin-top: 90px;
+        margin-bottom: 50px;
+        img {
+          width: inherit;
+          height: inherit;
+        }
+      }
+      &-title {
+        font-size: 20px;
+        color: #111111;
+        letter-spacing: 2px;
+        line-height: 20px;
+        font-weight: bold;
+      }
+      &-title-sub {
+        font-size: 14px;
+        color: #111111;
+        line-height: 22px;
+        margin-top: 20px;
+        margin-bottom: 50px;
+      }
+      &-btn {
+        user-select: none;
+        & > span {
+          border: 1px solid #999999;
+          border-radius: 13px;
+          width: 86px;
+          height: 26px;
+          line-height: 20px;
+          font-size: 12px;
+          display: block;
+          text-align: center;
+          box-sizing: border-box;
+          cursor: pointer;
+          img {
+            width: 12px;
+            height: 12px;
+            margin-left: 5px;
+          }
+          span,
+          img {
+            display: inline-block;
+            vertical-align: middle;
+          }
+          &:hover {
+            border-color: #666;
+            background: #fafafa;
+          }
+        }
+      }
+    }
+  }
+  .item.action .bot-bannel {
+    .title {
+      @include animationFn(bot-title, 20, 0);
+    }
+    .title-sub {
+      @include animationFn(bot-title-sub, 17, 2);
+    }
+    .image {
+      @include animationFn(bot-title-sub, 17, 3);
+    }
+    .content > div {
+      &:first-child {
+        @include animationFn(bot-content1, 18, 0);
+      }
+      &:nth-child(2) {
+        @include animationFn(bot-content1, 18, 1);
+      }
+      &:last-child {
+        @include animationFn(bot-content1, 18, 2);
+      }
+    }
+  }
+}
+// title
+@keyframes bot-title {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -100px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}
+
+// subtitle 和 标题装饰
+@keyframes bot-title-sub {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}
+
+// 求职场景
+@keyframes bot-content1 {
+  0% {
+    opacity: 0;
+    transform: translate3d(200px, 0, 0) scale(0.8) rotateY(20deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}

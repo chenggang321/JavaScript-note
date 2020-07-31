@@ -1,0 +1,568 @@
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 50%, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate(-120px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes StaffBgFadeInRight {
+  from {
+    // opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+  20% {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInLeftTop {
+  from {
+    opacity: 0;
+    transform: translate(-100%, -50%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+//talent bg
+@keyframes talentFadeInLeftBottom {
+  from {
+    // opacity: 0;
+    transform: translate(-300px, 147px);
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+//star
+@keyframes talentFadeInDown {
+  from {
+    // opacity: 0;
+    transform: translate(15px, -124px);
+  }
+  20% {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+//talent title
+@keyframes talentTitleFadeInDown {
+  from {
+    opacity: 0;
+    transform: translate(0, -100px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+//right-icon
+@keyframes talentFadeInRightBottom {
+  from {
+    opacity: 0;
+    transform: translate3d(30px, 30px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+//subtitle
+@keyframes talentSubtitleFadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -30px, 0);
+  }
+
+  to {
+    opacity: 0.32;
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes salarySubtitleFadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -30px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes staffSubtitleFadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -30px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes noOpacity {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -40px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+//introduction
+@keyframes talentSubtitleFadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+//check-video
+// @keyframes talentPlayFadeInUp {
+//     from {
+//         opacity: 0;
+//         transform: translate3d(0, 5px, 0);
+//     }
+
+//     to {
+//         opacity: 1;
+//         transform: translate3d(0, 0, 0);
+//     }
+// }
+
+//title
+// @keyframes talentFadeInDown {
+//     from {
+//         opacity: 0;
+//         transform: translate3d(0, -55px, 0);
+//     }
+
+//     to {
+//         opacity: 1;
+//         transform: translate3d(0, 0, 0);
+//     }
+// }
+
+//salary
+//charts-bar
+@keyframes salaryChartBarFadeInUp {
+  from {
+    // opacity: 0;
+    transform: translate3d(0, 100px, 0);
+  }
+
+  30% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+//tooltip
+@keyframes salaryFadeInRightBottom {
+  from {
+    opacity: 0;
+    transform: translate(100%, 50%);
+  }
+  10% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+//check-video
+@keyframes talentPlayFadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 60px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+//staff
+//title
+@keyframes staffFadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+//subtitle
+@keyframes staffSubtitleFadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -60px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+//introduction
+@keyframes talentSubtitleFadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+//check-video
+// @keyframes talentPlayFadeInUp {
+//     from {
+//         opacity: 0;
+//         transform: translate3d(0, 85px, 0);
+//     }
+
+//     to {
+//         opacity: 1;
+//         transform: translate3d(0, 0, 0);
+//     }
+// }
+//pie
+@keyframes staffFadeInLeftTop {
+  from {
+    // opacity: 0;
+    transform: translate(-130px, -60px);
+  }
+  20% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+//tooltipo child
+@keyframes staffWrapChild {
+  from {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+//leadership
+
+@keyframes leadershipFadeInDown {
+  from {
+    // opacity: 0;
+    transform: translate3d(0, -110px, 0);
+  }
+
+  15% {
+    opacity: 0;
+  }
+  96% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes leadershipFadeInUp {
+  from {
+    // opacity: 0;
+    transform: translate3d(0, 50%, 0);
+  }
+  15% {
+    opacity: 0;
+  }
+  96% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+//chart-bg
+@keyframes leadershipFadeInRight {
+  from {
+    // opacity: 0;
+    transform: translate3d(70px, 0, 0);
+  }
+  50% {
+    opacity: 0;
+  }
+  85% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+//leadershipWrapChild
+@keyframes leadershipWrapChild {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInLeftBottom {
+  from {
+    opacity: 0;
+    transform: translate(-130px, 60px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes staffFadeInLeftBottom {
+  from {
+    opacity: 0;
+    transform: translate(-130px, 60px);
+  }
+  20% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes fadeInRightBottom {
+  from {
+    opacity: 0;
+    transform: translate(100%, 50%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+// @keyframes zoomIn {
+//     from {
+//         opacity: 0;
+//         // transform: scale(1);
+//         transform: translate(85px, -79px);
+//     }
+//     25% {
+//         opacity: 0;
+//     }
+//     45% {
+//         // transform: scale(1);
+//     }
+//     63% {
+//         opacity: 1;
+//         transform: scale(0.9);
+//     }
+//     90% {
+//         transform: scale(1.1);
+//     }
+//     to {
+//         opacity: 1;
+//         transform: scale(1.08);
+//         // transform: scale(1.285);
+//     }
+// }
+@keyframes zoomIn {
+  from {
+    // opacity: 0;
+    // transform: scale(1);
+    // transform: translate(85px, -79px);
+  }
+  25% {
+    // opacity: 0;
+  }
+  45% {
+    // transform: scale(1);
+  }
+  63% {
+    // opacity: 1;
+    transform: scale(1.02);
+  }
+  90% {
+    transform: scale(1.1);
+  }
+  to {
+    // opacity: 1;
+    transform: scale(1.08);
+    // transform: scale(1.285);
+  }
+}
+
+//staff tooltip leadership circle
+@keyframes wrapChild {
+  from {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+//advantage li
+
+@keyframes advantageTitle {
+  from {
+    transform: translate3d(0, 100px, 0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateZ(0);
+    opacity: 1;
+  }
+}
+@keyframes advantageCard {
+  from {
+    transform: translate3d(0, 200px, 0) rotateX(-10deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateZ(0);
+    opacity: 1;
+  }
+}
+@keyframes advantageFadeUp {
+  from {
+    transform: translateY(-30px);
+    opacity: 1;
+  }
+  30% {
+    opacity: 0;
+  }
+  to {
+    transform: translateY(-200px);
+    opacity: 0;
+  }
+}
+@keyframes advantageFadeDown {
+  from {
+    transform: translateY(50px);
+    z-index: -1;
+  }
+  to {
+    transform: translateY(-200);
+    z-index: 1;
+  }
+}
+
+// personalise
+@keyframes personaliseCard {
+  from {
+    transform: translate3d(-200px, 0, 0) scale(0.8) rotateY(20deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateZ(0);
+    opacity: 1;
+  }
+}

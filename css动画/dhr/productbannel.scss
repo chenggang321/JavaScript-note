@@ -1,0 +1,218 @@
+@import './mixin.scss';
+
+.dhr-home-page .item-list {
+  .product-bannel {
+    height: 588px;
+    background: #f8fbff;
+    padding-top: 90px;
+    padding-bottom: 130px;
+    position: relative;
+    .title-img {
+      margin-bottom: 60px;
+      margin-top: 30px;
+    }
+    .bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      & > img {
+        position: absolute;
+      }
+      .bg-bottom {
+        right: 256px;
+        // top: 370px; 440px;
+        height: 440px;
+      }
+      .bg-right {
+        // bottom: 20px;
+        width: 224px;
+        right: -50px;
+      }
+      .bg-left {
+        width: 382px;
+        left: -130px;
+        // top: 90px;
+      }
+      .bg-top {
+        width: 490px;
+        // top: -370px;
+        right: -90px;
+      }
+    }
+    .content {
+      padding: 0;
+      & > div {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: 410px;
+        // width: calc((100% - 140px) / 3);
+        width: calc((100% - 80px) / 3);
+        height: 230px;
+        box-sizing: border-box;
+        text-align: center;
+        background: #ffffff;
+        box-shadow: 0 40px 60px 0 rgba(13, 19, 31, 0.08);
+        border-radius: 10px;
+        padding: 40px 55px 36px 55px;
+        &:first-child {
+          float: left;
+        }
+        &:nth-child(2) {
+          margin-left: 40px;
+          margin-right: 40px;
+        }
+        &:last-child {
+          float: right;
+        }
+      }
+      &-title {
+        font-size: 24px;
+        color: #111111;
+        letter-spacing: 2px;
+        line-height: 24px;
+        font-weight: bold;
+      }
+      &-desc {
+        font-size: 14px;
+        color: #111111;
+        letter-spacing: 0;
+        text-align: center;
+        line-height: 22px;
+        margin-top: 22px;
+        margin-bottom: 30px;
+      }
+      &-btn {
+        width: 120px;
+        height: 34px;
+        background: #0f5aff;
+        box-shadow: 0 16px 24px 0 rgba(0, 27, 156, 0.08);
+        border-radius: 17px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 34px;
+        user-select: none;
+        display: inline-block;
+        cursor: pointer;
+        text-decoration: none;
+        img {
+          margin-left: 4px;
+          vertical-align: -1px;
+        }
+        &:hover {
+          background: #0046e6;
+        }
+      }
+    }
+  }
+  .item.action .product-bannel {
+    .title {
+      @include animationFn(product-title, 19, 2);
+    }
+    .title-img {
+      @include animationFn(product-title, 19, 4);
+    }
+    .bg-left {
+      @include animationFn(product-bg-left, 20, 0);
+    }
+    .bg-top {
+      @include animationFn(product-bg-top, 20, 0);
+    }
+    .bg-right {
+      @include animationFn(product-bg-right, 19, 7);
+    }
+    .bg-bottom {
+      @include animationFn(product-bg-bottom, 13, 13);
+    }
+    .item.action .content {
+      transform-style: preserve-3d;
+      perspective: 900px;
+      & > div {
+        &:first-child {
+          @include animationFn(product-rect1, 14, 6);
+        }
+        &:nth-child(2) {
+          @include animationFn(product-rect1, 14, 8);
+        }
+        &:last-child {
+          @include animationFn(product-rect1, 15, 9);
+        }
+      }
+    }
+  }
+}
+
+// 标题和标题装饰
+@keyframes product-title {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+// 左侧背景图形
+@keyframes product-bg-left {
+  0% {
+    opacity: 0;
+    transform: translate3d(-20px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+
+// 右上角背景图形
+@keyframes product-bg-top {
+  0% {
+    transform: translate3d(0, -20px, 0);
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+// 右侧角背景图形
+@keyframes product-bg-right {
+  0% {
+    opacity: 0;
+    transform: translate3d(20px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+
+// 下面侧角背景图形
+@keyframes product-bg-bottom {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  100% {
+    opacity: 0.36;
+    transform: scale(1) translateZ(0);
+  }
+}
+
+// 数字化招聘入口
+@keyframes product-rect1 {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 200px, 0) rotateX(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}

@@ -1,0 +1,92 @@
+@import './_mixin.scss';
+
+.dhr-home-page .item-list {
+  .customer-bannel {
+    height: 416px;
+    background: #fff;
+    padding: 80px 0;
+    .logo-panel {
+      width: 100%;
+      height: 60px;
+      background-size: auto 100%;
+      &.logo-panel1 {
+        margin-top: 60px;
+        margin-bottom: 40px;
+        background-image: url('../images/customer-logo1.png');
+      }
+      &.logo-panel2 {
+        background-image: url('../images/customer-logo2.png');
+      }
+    }
+    .mask-shadow-left {
+      float: left;
+      width: 20%;
+      height: 100%;
+      background-image: linear-gradient(
+                      270deg,
+                      rgba(255, 255, 255, 0) 0%,
+                      #ffffff 100%
+      );
+    }
+    .mask-shadow-right {
+      float: right;
+      display: inline-block;
+      width: 20%;
+      height: 100%;
+      background-image: linear-gradient(
+                      90deg,
+                      rgba(255, 255, 255, 0) 0%,
+                      #ffffff 100%
+      );
+    }
+  }
+  .item.action .customer-bannel {
+    .title {
+      @include animationFn(customer-title, 14, 0);
+    }
+    .logo-panel {
+      opacity: 0;
+      animation-name: customer-logo, scrollBrand;
+      animation-fill-mode: forwards, none;
+      animation-timing-function: ease, linear;
+      animation-iteration-count: 1, infinite;
+    }
+    .logo-panel1 {
+      animation-duration: $base-time * 14, 80s;
+    }
+    .logo-panel2 {
+      animation-duration: $base-time * 14, 120s;
+    }
+  }
+}
+// 标题
+@keyframes customer-title {
+  0% {
+    opacity: 0;
+    transform: translate3d(-100px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}
+// logo
+@keyframes customer-logo {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+// logo移动
+@keyframes scrollBrand {
+  0% {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -2718px 0;
+  }
+}

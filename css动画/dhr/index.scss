@@ -1,0 +1,88 @@
+@import './aibannel.scss';
+@import './productbannel.scss';
+@import './botbannel.scss';
+@import './customerbannel.scss';
+@import './isobannel.scss';
+@import './mixin.scss';
+.dhr-home-page {
+  min-width: 1280px;
+  text-align: center;
+  background-color: #fff;
+  .dhr-carousel-bannel.carousel_wrapper {
+    background-image: linear-gradient(135deg, #0068ff 0%, #0034ff 100%);
+    .carousel_customer {
+      .bg-right {
+        &-wrap {
+          width: 400px;
+          margin-top: 270px;
+          float: right;
+          overflow: hidden;
+          position: relative;
+          z-index: 1;
+          pointer-events: none;
+        }
+        @include animationFn(dhr-carousel-bg, 20, 4);
+      }
+      .bg-left {
+        width: 840px;
+        height: 640px;
+        float: left;
+      }
+    }
+    .carousel_left_title_sub {
+      letter-spacing: 4.6px;
+    }
+    .carousel_right {
+      position: relative;
+      z-index: 1;
+    }
+  }
+  .item-list {
+    .title {
+      font-size: 36px;
+      color: #111111;
+      letter-spacing: 6px;
+      text-align: center;
+      line-height: 36px;
+      font-weight: bold;
+    }
+
+    .item {
+      opacity: 0;
+      & > div {
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding-right: 30px;
+        padding-left: 30px;
+        &.customer-bannel {
+          padding-left: 0;
+          padding-right: 0;
+        }
+        .inner {
+          max-width: 1340px;
+          margin: 0 auto;
+          width: 100%;
+          height: 100%;
+        }
+      }
+      &.action {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// 首屏右侧背景
+@keyframes dhr-carousel-bg {
+  0% {
+    opacity: 0;
+    transform: translate3d(20px, 0, 0);
+  }
+  55% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}

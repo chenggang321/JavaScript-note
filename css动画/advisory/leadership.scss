@@ -1,0 +1,381 @@
+.leadership-section {
+  background-color: #fff;
+  overflow: hidden;
+  .leadership-content {
+    max-width: 1440px;
+    margin: auto;
+    padding: 169px 50px 144px 50px;
+    .leadership-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .introduction-wrap {
+      width: 446px;
+    }
+    .introduction-content {
+      position: relative;
+      .subtitle {
+        width: 523px;
+        // height: 78px;
+        height: 32px;
+        margin-bottom: 38px;
+        background-image: url('../images/leadership/subtitle.svg');
+        background-repeat: no-repeat;
+        opacity: 0;
+      }
+    }
+    .right-wrap {
+      position: relative;
+      width: 354px;
+      height: 347px;
+      right: 0;
+      .charts-bg {
+        opacity: 0;
+        width: 566px;
+        height: 321px;
+        right: 99px;
+        position: absolute;
+        // border:1px solid #eee;
+        background-image: url('../images/leadership/pic9.svg');
+        background-position: -79px -44px;
+        background-repeat: no-repeat;
+        box-shadow: 0 34px 80px 0 rgba(0, 0, 0, 0.05);
+      }
+      .charts-bar {
+        opacity: 0;
+        width: 236px;
+        height: 229px;
+        position: absolute;
+        top: -70px;
+        right: 284px;
+        background-image: url('../images/leadership/pic10.svg');
+        background-position: -59px -25px;
+        background-repeat: no-repeat;
+        box-shadow: 0 34px 60px 0 rgba(68, 68, 68, 0.14);
+        border-radius: 8px;
+      }
+      .charts-left-bar,
+      .charts-middle-bar,
+      .charts-right-bar {
+        background-repeat: no-repeat;
+        position: absolute;
+        width: 20px;
+        bottom: 48px;
+        opacity: 0;
+      }
+      .charts-left-bar {
+        height: 38px;
+        background-image: url('../images/leadership/pic10_2.svg');
+        left: 67px;
+      }
+      .charts-middle-bar {
+        height: 76px;
+        background-image: url('../images/leadership/pic10_3.svg');
+        left: 111px;
+      }
+      .charts-right-bar {
+        height: 55px;
+        background-image: url('../images/leadership/pic10_4.svg');
+        right: 61px;
+      }
+      .charts-tags {
+        opacity: 0;
+        width: 234px;
+        height: 146px;
+        position: absolute;
+        top: -11px;
+        // left: 429px;
+        right: 20px;
+        background-image: url('../images/leadership/pic11.svg');
+        background-repeat: no-repeat;
+        box-shadow: -11px 34px 60px 0 rgba(68, 68, 68, 0.14);
+        border-radius: 8px;
+      }
+
+      .charts-tags-market,
+      .charts-tags-ant,
+      .charts-tags-team,
+      .charts-tags-negotiation {
+        opacity: 0;
+        width: 80px;
+        height: 26px;
+        position: absolute;
+        left: 22px;
+      }
+      .charts-tags-market {
+        opacity: 0;
+        background-image: url('../images/leadership/pic11_2.svg');
+        top: 64px;
+      }
+      .charts-tags-ant {
+        opacity: 0;
+        background-image: url('../images/leadership/pic11_3.svg');
+        top: 64px;
+        left: 120px;
+      }
+      .charts-tags-team {
+        opacity: 0;
+        background-image: url('../images/leadership/pic11_4.svg');
+        top: 100px;
+      }
+      .charts-tags-negotiation {
+        opacity: 0;
+        background-image: url('../images/leadership/pic11_5.svg');
+        top: 100px;
+        left: 120px;
+      }
+      .charts-slider {
+        opacity: 0;
+        width: 236px;
+        height: 178px;
+        position: absolute;
+        bottom: -9px;
+        right: 284px;
+        background-image: url('../images/leadership/pic12.svg');
+        background-position: -79px -63px;
+        background-repeat: no-repeat;
+        box-shadow: 0 16px 80px 0 rgba(0, 0, 0, 0.05);
+      }
+      .charts-slider-green {
+        opacity: 0;
+        height: 10px;
+        background-repeat: no-repeat;
+        width: 80%;
+        bottom: 78px;
+        left: 26px;
+        position: absolute;
+        background-image: url('../images/leadership/pic12_2.svg');
+      }
+      .charts-slider-blue {
+        opacity: 0;
+        height: 10px;
+        background-repeat: no-repeat;
+        width: 80%;
+        bottom: 30px;
+        left: 26px;
+        position: absolute;
+        background-image: url('../images/leadership/pic12_3.svg');
+      }
+      .charts-line {
+        opacity: 0;
+        width: 234px;
+        height: 251px;
+        position: absolute;
+        bottom: -59px;
+        right: 20px;
+        background-image: url('../images/leadership/pic13.svg');
+        background-position: -79px -63px;
+        background-repeat: no-repeat;
+        box-shadow: 0 16px 80px 0 rgba(0, 0, 0, 0.05);
+      }
+      .charts-path {
+        opacity: 0;
+        height: 120px;
+        width: 150px;
+        top: 94px;
+        left: 61px;
+        position: absolute;
+        background-image: url('../images/leadership/pic13_5.svg');
+        background-repeat: no-repeat;
+      }
+      .charts-circle-child {
+        width: 16px;
+        height: 16px;
+        background: #59c6ff;
+        border: 3px solid #ffffff;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+        border-radius: 50%;
+      }
+      .charts-left-circle {
+        border-radius: 50%;
+        opacity: 0;
+        width: 16px;
+        height: 16px;
+        background-color: #fff;
+        position: absolute;
+        z-index: 22222;
+        top: 105px;
+        left: 56px;
+        background-position: 52% 39%;
+        background-repeat: no-repeat;
+      }
+      .charts-middle-circle {
+        opacity: 0;
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        top: 131px;
+        left: 117px;
+        background-position: 52% 39%;
+        background-repeat: no-repeat;
+        .charts-circle-child {
+          background-color: #48a8fe;
+        }
+      }
+      .charts-right-circle {
+        opacity: 0;
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        top: 89px;
+        right: 48px;
+        background-position: 52% 39%;
+        background-repeat: no-repeat;
+        .charts-circle-child {
+          background-color: #2e76fb;
+        }
+      }
+    }
+  }
+}
+
+//animation
+.animated {
+  .leadership-section {
+    .charts-bg {
+      animation: leadershipFadeInRight 0.55s ease-in-out forwards;
+    }
+    .charts-bar {
+      animation: leadershipFadeInDown 0.55s ease-in-out forwards;
+    }
+    .charts-tags {
+      animation: leadershipFadeInDown 0.55s ease-in-out forwards;
+    }
+    .charts-slider {
+      animation: leadershipFadeInUp 0.55s ease-in-out forwards;
+    }
+    .charts-line {
+      animation: leadershipFadeInUp 0.55s ease-in-out forwards;
+    }
+
+    .charts-left-circle {
+      animation: wrapChild 0.2s ease-in-out forwards;
+      animation-delay: 0.45s;
+    }
+    .charts-middle-circle {
+      animation: wrapChild 0.2s ease-in-out forwards;
+      animation-delay: 0.55s;
+    }
+    .charts-right-circle {
+      animation: wrapChild 0.2s ease-in-out forwards;
+      animation-delay: 0.6s;
+    }
+    .charts-path {
+      animation: widthPath 0.38s ease-in-out forwards;
+      animation-delay: 0.55s;
+    }
+    .charts-left-bar {
+      animation: heightLeftBar 0.45s ease-in-out forwards;
+      // animation-delay: 0.66s;
+    }
+    .charts-middle-bar {
+      animation: heightMiddleBar 0.45s ease-in-out forwards;
+      // animation-delay: 0.66s;
+    }
+    .charts-right-bar {
+      animation: heightRightBar 0.45s ease-in-out forwards;
+      // animation-delay: 0.66s;
+    }
+    .charts-slider-green {
+      animation: widthSliderPath 0.4s ease-in-out forwards;
+      animation-delay: 0.45s;
+    }
+    .charts-slider-blue {
+      animation: widthSliderPath 0.4s ease-in-out forwards;
+      animation-delay: 0.7s;
+    }
+
+    .charts-tags-market {
+      animation: leadershipWrapChild 0.3s ease-in-out forwards;
+      animation-delay: 0.45s;
+    }
+    .charts-tags-ant {
+      animation: leadershipWrapChild 0.3s ease-in-out forwards;
+      animation-delay: 0.5s;
+    }
+    .charts-tags-team {
+      animation: leadershipWrapChild 0.3s ease-in-out forwards;
+      animation-delay: 0.55s;
+    }
+    .charts-tags-negotiation {
+      animation: leadershipWrapChild 0.3s ease-in-out forwards;
+      animation-delay: 0.6s;
+    }
+    .title {
+      animation: staffFadeInDown 0.7s ease-in-out forwards;
+    }
+
+    .subtitle {
+      animation: salarySubtitleFadeInDown 0.59s ease-in-out forwards;
+    }
+
+    .introduction {
+      animation: talentSubtitleFadeInUp 0.68s ease-in-out forwards;
+      animation-delay: 0.02s;
+    }
+
+    .check-video {
+      animation: talentPlayFadeInUp 0.68s ease-in-out forwards;
+      animation-delay: 0.02s;
+    }
+  }
+}
+@keyframes widthPath {
+  from {
+    opacity: 0;
+    width: 0px;
+  }
+
+  to {
+    opacity: 1;
+    width: 150px;
+  }
+}
+@keyframes widthSliderPath {
+  from {
+    opacity: 0;
+    width: 0px;
+  }
+
+  to {
+    opacity: 1;
+    width: 100%;
+  }
+}
+
+@keyframes heightLeftBar {
+  from {
+    opacity: 0;
+    height: 0;
+  }
+
+  to {
+    opacity: 1;
+    height: 38px;
+  }
+}
+
+@keyframes heightMiddleBar {
+  from {
+    opacity: 0;
+    height: 0;
+  }
+
+  to {
+    opacity: 1;
+    height: 76px;
+  }
+}
+
+@keyframes heightRightBar {
+  from {
+    opacity: 0;
+    height: 0;
+  }
+
+  to {
+    opacity: 1;
+    height: 55px;
+  }
+}

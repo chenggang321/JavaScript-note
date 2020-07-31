@@ -1,0 +1,196 @@
+* {
+  box-sizing: border-box;
+}
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li {
+  padding: 0;
+  margin: 0;
+}
+ul,
+li {
+  list-style: none;
+}
+.advisory-home-page {
+  min-width: 1280px;
+  .footer-registry {
+    background-color: #fff;
+  }
+  .carousel_wrapper.dhr-carousel-bannel {
+    background-image: linear-gradient(
+                    132deg,
+                    #007dff 0%,
+                    #0164f5 67%,
+                    #0053e9 100%
+    );
+  }
+  .carousel_left {
+    padding-top: 160px;
+  }
+  .carousel_left .carousel_left_title {
+    border: 0 solid #ffffff;
+    font-family: PingFangSC-Semibold;
+    font-size: 46px;
+    color: #ffffff;
+    letter-spacing: 6.4px;
+    line-height: 46px;
+    text-shadow: 0 10px 20px rgba(0, 58, 177, 0.3);
+  }
+  .carousel_left_title_sub {
+    margin-top: 66px;
+    margin-bottom: 76px;
+  }
+  .carousel_left_title_sub .advantage-title {
+    margin-bottom: 20px;
+    background-image: url('./components/images/subtitle.svg');
+    background-repeat: no-repeat;
+    height: 31px;
+    background-size: contain;
+  }
+  .carousel_left_title_sub p:last-child {
+    font-family: PingFangSC-Regular;
+    font-size: 16px;
+    color: #ffffff;
+    letter-spacing: 1px;
+    line-height: 28px;
+  }
+  .carousel_right img {
+    box-shadow: 0 90px 100px 0 rgba(0, 14, 80, 0.36);
+  }
+  .carousel_customer .bg-right-wrap {
+    height: 100%;
+    width: 50%;
+    position: relative;
+  }
+  .carousel_customer .bg-right {
+    width: 450px;
+    height: 464px;
+    position: absolute;
+    top: 75px;
+    right: 390px;
+  }
+
+  //header
+  .advisory-bannel {
+    .carousel_right_report_wrap {
+      height: 700px;
+    }
+  }
+  .advisory-bannel.carousel_wrapper {
+    height: 700px;
+  }
+}
+
+//media
+$screen-xxxl: 1920px;
+$screen-xxxl-min: $screen-xxxl;
+// $screen-xxlx-max:($screen-xxxl-min + 1px);
+
+$screen-xxl: 1441px;
+$screen-xxl-min: $screen-xxl;
+$screen-xxl-max: ($screen-xxxl-min - 2px);
+
+$screen-xl: 1281px;
+$screen-xl-min: $screen-xl;
+$screen-xl-max: ($screen-xxl-min - 2px);
+// @media screen and(min-width:$screen-xl-min) and (max-width: $screen-xxl-min) {
+//     .advisory-home-page {
+//         .talent-section .talent-content,
+//         .salary-section .salary-content,
+//         .staff-section .staff-content,
+//         .leadership-section .leadership-content,
+//         .advantage-section .advantage-content {
+//             width: 1240px;
+//             padding-left: 0;
+//             padding-right: 0;
+//         }
+//     }
+//     .advantage-section .advantage-content ul > li {
+//         width: 400px;
+//     }
+// }
+@media screen and(min-width:1281px) and (max-width: 1340px) {
+  .advisory-home-page {
+    .talent-section .talent-content,
+    .salary-section .salary-content,
+    .staff-section .staff-content,
+    .leadership-section .leadership-content,
+    .advantage-section .advantage-content {
+      // width: 1240px;
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+  }
+  .advantage-section .advantage-content ul > li {
+    width: 400px;
+  }
+}
+@media screen and(min-width:1341px) and (max-width: 1920px) {
+  .advisory-home-page {
+    .talent-section .talent-content,
+    .salary-section .salary-content,
+    .staff-section .staff-content,
+    .leadership-section .leadership-content,
+    .advantage-section .advantage-content {
+      width: 1240px;
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+  }
+  .advantage-section .advantage-content ul > li {
+    width: 400px;
+  }
+}
+@media screen and (max-width: 1280px) {
+  .advantage-section .advantage-content ul > li:nth-child(2):hover {
+    .down {
+      .title {
+        transform: translateX(-85px);
+      }
+    }
+  }
+  .advantage-section .advantage-content ul > li:first-child:hover,
+  .advantage-section .advantage-content ul > li:last-child:hover {
+    .title {
+      transform: translateX(-75px);
+    }
+  }
+}
+@media screen and(min-width:1280px) and (max-width: 1440px) {
+  .advisory-home-page .carousel_customer .bg-right {
+    right: 320px;
+  }
+}
+@media screen and(min-width:$screen-xxl-min) and (max-width: $screen-xxxl-min) {
+  .advisory-home-page {
+    .talent-section .talent-content,
+    .salary-section .salary-content,
+    .staff-section .staff-content,
+    .leadership-section .leadership-content,
+    .advantage-section .advantage-content {
+      width: 1300px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  .advantage-section .advantage-content ul > li {
+    width: 420px;
+  }
+  .advantage-section .advantage-content ul > li:nth-child(2):hover {
+    .down {
+      .title {
+        transform: translateX(-105px);
+      }
+    }
+  }
+  .advantage-section .advantage-content ul > li:first-child:hover,
+  .advantage-section .advantage-content ul > li:last-child:hover {
+    .title {
+      transform: translateX(-95px);
+    }
+  }
+}

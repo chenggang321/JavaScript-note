@@ -1,0 +1,48 @@
+@import './_mixin.scss';
+.dhr-home-page .item-list {
+  .iso-bannel {
+    height: 584px;
+    background: #f8fbff;
+    padding-top: 100px;
+    .icon {
+      margin-bottom: 24px;
+    }
+    .title-sub {
+      font-size: 16px;
+      margin-top: 20px;
+      letter-spacing: 3px;
+      margin-bottom: 50px;
+    }
+    .content {
+      img {
+        width: 1200px;
+        height: 160px;
+      }
+    }
+  }
+  .item.action .iso-bannel {
+    .icon {
+      @include animationFn(iso-title, 20, 1);
+    }
+    .title {
+      @include animationFn(iso-title, 20, 2);
+    }
+    .title-sub {
+      @include animationFn(iso-title, 20, 4);
+    }
+    .content {
+      @include animationFn(iso-title, 20, 4);
+    }
+  }
+}
+
+@keyframes iso-title {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}

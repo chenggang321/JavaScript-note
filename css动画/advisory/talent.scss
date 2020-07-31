@@ -1,0 +1,244 @@
+@import 'animation';
+.talent-section {
+  background: #f8fbff;
+  // height: 660px;
+  position: relative;
+  overflow: hidden;
+  .left-top {
+    position: absolute;
+    // border:1px solid #111;
+    width: 280px;
+    height: 280px;
+    top: 57px;
+    left: -155px;
+    background-image: url('../images/talent/graph3.png');
+    // background-position: -80px -45px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0;
+  }
+  .right-bottom {
+    position: absolute;
+    // border:1px solid #111;
+    width: 224px;
+    height: 224px;
+    bottom: 23px;
+    right: 0px;
+    right: -112px;
+    background-image: url('../images/talent/graph4.png');
+    // background-position: -80px -45px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0;
+  }
+  .talent-content {
+    position: relative;
+    max-width: 1440px;
+    margin: auto;
+    // padding-top: 131px;
+    padding-top: 133px;
+    padding-bottom: 120px;
+    padding-left: 50px;
+    padding-right: 50px;
+    // padding-left: 100px;
+    // padding-right: 81px;
+    .introduction-wrap {
+      width: 523px;
+    }
+
+    .introduction-wrap .introduction {
+      letter-spacing: 2.9px;
+    }
+    .introduction-content {
+      .subtitle {
+        width: 523px;
+        // height: 78px;
+        height: 32px;
+        margin-bottom: 38px;
+        background-image: url('../images/talent/subtitle.svg');
+        background-repeat: no-repeat;
+        opacity: 0;
+      }
+    }
+  }
+  .talent-header {
+    height: 89px;
+  }
+  .talent-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .left-wrap {
+      position: relative;
+    }
+    .right-wrap {
+      // padding-left: 194px;
+      padding-top: 26px;
+    }
+    .left-wrap .potential {
+      width: 535px;
+      height: 318px;
+      // border:1px solid #eee;
+      background-image: url('../images/talent/pic_3@2x.png');
+      // background-position: -80px -45px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      opacity: 0;
+      box-shadow: 0 16px 80px 0 rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+    }
+    .left-wrap .star {
+      top: -33px;
+      right: -61px;
+      width: 228px;
+      height: 240px;
+      // border: 1px solid #eee;
+      position: absolute;
+      background-image: url('../images/talent/pic_2.svg');
+      // background-position: -89px -73px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      opacity: 0;
+      box-shadow: 0 16px 80px 0 rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+    }
+  }
+  // .bg-wave {
+  //     position: relative;
+  //     height: 50px;
+  //     background-color: #f8fbff;
+  //     overflow: hidden;
+
+  //     &:before {
+  //         content: '';
+  //         position: absolute;
+  //         left: -20%;
+  //         bottom: 0;
+  //         width: 140%;
+  //         height: 160px;
+  //         border-radius: 0 0 50% 50%;
+  //         background-image: linear-gradient(
+  //             133deg,
+  //             #e0efff 0%,
+  //             #d4e2f7 50%,
+  //             #dceafe 92%
+  //         );
+  //     }
+
+  //     &:after {
+  //         content: '';
+  //         position: absolute;
+  //         left: -20%;
+  //         bottom: 0;
+  //         width: 140%;
+  //         height: 330px;
+  //         border-radius: 0 0 50% 50%;
+  //         background-image: linear-gradient(
+  //             133deg,
+  //             #1d94ff 0%,
+  //             #017aff 50%,
+  //             #004eff 100%
+  //         );
+  //     }
+
+  //     &-inner {
+  //         position: absolute;
+  //         left: -10%;
+  //         bottom: 20px;
+  //         width: 160%;
+  //         height: 269px;
+  //         border-radius: 0 0 230% 50%;
+  //         background-color: #c4e3ff;
+  //     }
+  // }
+  .bg-wave {
+    position: relative;
+    height: 50px;
+    background-color: #f8fbff;
+    overflow: hidden;
+    top: -2px;
+    // background-image: url('../../../../components/carousel/assets/bg5.svg');
+    // &:before {
+    //     content: '';
+    //     position: absolute;
+    //     left: -20%;
+    //     bottom: 0;
+    //     width: 140%;
+    //     height: 160px;
+    //     border-radius: 0 0 50% 50%;
+    //     background-image: linear-gradient(
+    //         133deg,
+    //         #e0efff 0%,
+    //         #d4e2f7 50%,
+    //         #dceafe 92%
+    //     );
+    // }
+
+    // &:after {
+    //     content: '';
+    //     position: absolute;
+    //     left: -20%;
+    //     bottom: 0;
+    //     width: 140%;
+    //     height: 330px;
+    //     border-radius: 0 0 50% 50%;
+    //     background-image: linear-gradient(
+    //         133deg,
+    //         #1d94ff 0%,
+    //         #017aff 50%,
+    //         #004eff 100%
+    //     );
+    // }
+
+    // &-inner {
+    //     position: absolute;
+    //     left: -10%;
+    //     bottom: 20px;
+    //     width: 160%;
+    //     height: 269px;
+    //     border-radius: 0 0 230% 50%;
+    //     background-color: #c4e3ff;
+    // }
+  }
+}
+
+//animation
+.animated {
+  .talent-section {
+    .potential {
+      animation: talentFadeInLeftBottom 0.5s ease-in-out forwards;
+    }
+    .star {
+      animation: talentFadeInDown 0.5s ease-in-out forwards;
+    }
+    .left-top {
+      animation: fadeInLeft 0.35s ease-in-out forwards;
+      animation-delay: 0.15s;
+    }
+    .right-bottom {
+      animation: talentFadeInRightBottom 0.54s ease-in-out forwards;
+      animation-delay: 0.08s;
+    }
+    .title {
+      position: relative;
+      animation: talentTitleFadeInDown 0.6s ease-in-out forwards;
+      // animation-delay: 0.07s;
+    }
+
+    .subtitle {
+      position: relative;
+      animation: noOpacity 0.4s ease-in-out forwards;
+      // animation-delay: 0.025s;
+    }
+
+    .introduction {
+      animation: talentSubtitleFadeInUp 0.4s ease-in-out forwards;
+      animation-delay: 0.025s;
+    }
+
+    .check-video {
+      animation: talentPlayFadeInUp 0.25s ease-in-out forwards;
+      animation-delay: 0.2s;
+    }
+  }
+}

@@ -1,0 +1,251 @@
+@import 'animation';
+.advantage-section {
+  height: 600px;
+  background-color: #f8fbff;
+  position: relative;
+  .top-bg {
+    width: 334px;
+    height: 346px;
+    // background-image: url('../images/advantage/graph8.svg');
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 79px;
+    left: -158px;
+  }
+  .advantage-content {
+    position: relative;
+    max-width: 1440px;
+    margin: auto;
+    padding: 120px 50px 130px 50px;
+  }
+  ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    > li {
+      height: 240px;
+      width: 380px;
+      opacity: 0;
+    }
+    > li:hover > div {
+      background: #ffffff;
+      border: 1 solid #f4f4f4;
+      transform: translateY(-15px);
+      box-shadow: 0 15px 50px 0 rgba(20, 35, 95, 0.15);
+    }
+    > li > div {
+      background: #ffffff;
+      border: 1px solid #f4f4f4;
+      box-shadow: 0 4px 20px 0 rgba(20, 35, 95, 0.06);
+      border-radius: 10px;
+      height: 100%;
+      transition: all 0.2s;
+      overflow: hidden;
+      width: 100%;
+      dt {
+        height: 120px;
+        width: 130px;
+      }
+      dl {
+        height: 100%;
+        display: table-cell;
+        width: 100%;
+        vertical-align: middle;
+      }
+      dd {
+        margin-top: 16px;
+        font-family: PingFangSC-Semibold;
+        font-size: 20px;
+        color: #111111;
+        letter-spacing: 1.67px;
+        text-align: center;
+        line-height: 24px;
+        white-space: nowrap;
+      }
+    }
+
+    li .ai-introduction {
+      // padding: 40px;
+      text-align: left;
+      position: relative;
+      transition: all 0.2s;
+      .up,
+      .down {
+        height: 100%;
+        width: 100%;
+        display: table;
+        // transition: transform 0.5s, opacity 0.16s;
+      }
+      .up {
+        // transition: transform 0.3s 0.16s, opacity 0.3s 0.2s;
+      }
+      .down {
+        padding: 40px;
+        // opacity: 0;
+        // transform: translateY(-20%);
+        transform: translate(0%, -44%);
+        li {
+          margin: 10px 0;
+        }
+        .title {
+          position: absolute;
+          top: 28px;
+          font-family: PingFangSC-Medium;
+          font-size: 20px;
+          color: #2775ff;
+          transform: translateX(0px);
+          // transition: transform 0.5s;
+          text-align: center;
+          line-height: 20px;
+          letter-spacing: 1.67px;
+          width: calc(100% - 80px);
+          font-weight: 600;
+          color: #111111;
+        }
+        ol {
+          margin-top: 31px;
+          opacity: 0;
+        }
+      }
+      .down li:last-child {
+        // background-image: url('../images/advantage/superiority-item-bg.svg');
+        width: 109px;
+        height: 110px;
+        right: 0;
+        bottom: 0px;
+        position: absolute;
+      }
+      .icon {
+        width: 140px;
+        height: 90px;
+        background-image: url('../images/advantage/pic_16.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        margin-bottom: 22px;
+        margin: auto;
+        transform: translateY(-22px);
+      }
+    }
+    li.active .ai-introduction {
+      .up {
+        // transition: transform 0.4s, opacity 0.16s;
+      }
+    }
+    li:hover {
+      .up {
+        opacity: 0;
+        transform: translateY(-15%);
+      }
+      .down {
+        opacity: 1;
+        transform: translateY(-95%);
+        position: relative;
+        .title {
+          transform: translateX(-95px);
+          color: #2775ff;
+          // transition: transform 0.5s, color 0.5s;
+        }
+        ol {
+          opacity: 1;
+        }
+      }
+    }
+    li:first-child:hover,
+    li:last-child:hover {
+      .title {
+        transform: translateX(-85px);
+      }
+    }
+    > li:nth-child(2) {
+      margin-left: 20px;
+      margin-right: 20px;
+      .icon {
+        background-image: url('../images/advantage/pic_17.png');
+      }
+      .down {
+        padding: 34px 40px;
+      }
+    }
+    > li:nth-child(2):hover {
+      .down {
+        title {
+          transform: translateX(-100px);
+        }
+      }
+    }
+    > li:last-child {
+      .icon {
+        background-image: url('../images/advantage/pic_18.png');
+      }
+    }
+    > li .ai-introduction .down {
+      li {
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: #111111;
+        letter-spacing: 0;
+        line-height: 22px;
+      }
+    }
+  }
+  .advantage-title {
+    font-family: PingFangSC-Regular;
+    font-size: 36px;
+    color: #111111;
+    letter-spacing: 6px;
+    text-align: center;
+    line-height: 36px;
+    opacity: 0;
+  }
+  .advantage-icon {
+    width: 174px;
+    height: 12px;
+    background-image: url('../images/advantage/graph9.svg');
+    height: 74px;
+    background-repeat: no-repeat;
+    margin: auto;
+    background-position: 0 16px;
+    opacity: 0;
+  }
+  .small-circle {
+    width: 4px;
+    height: 4px;
+    background: #666666;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 8px;
+    position: relative;
+    top: -2px;
+    padding: 2px;
+  }
+  .text-area {
+    display: flex;
+    align-items: baseline;
+  }
+}
+
+//animation
+.animated {
+  .advantage-section {
+    .advantage-title {
+      animation: advantageTitle 0.63s ease-in-out forwards;
+      animation-delay: 0.06667s;
+    }
+    .advantage-icon {
+      animation: advantageTitle 0.63s ease-in-out forwards;
+      animation-delay: 0.1333s;
+    }
+    ul > li:first-child {
+      animation: advantageCard 0.46667s ease-in-out forwards;
+      animation-delay: 0.2s;
+    }
+    ul > li:nth-child(2) {
+      animation: advantageCard 0.46667s ease-in-out forwards;
+      animation-delay: 0.26667s;
+    }
+    ul > li:last-child {
+      animation: advantageCard 0.5s ease-in-out forwards;
+      animation-delay: 0.3s;
+    }
+  }
+}

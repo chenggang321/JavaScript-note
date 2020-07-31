@@ -1,0 +1,180 @@
+.staff-section {
+  height: 660px;
+  background-color: #f8fbff;
+  position: relative;
+  .bg-icon {
+    opacity: 0;
+    width: 311px;
+    height: 321px;
+    // border:1px solid #eee;
+    background-image: url('../images/staff/graph5.svg');
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 12px;
+    top: 150px;
+  }
+  .introduction-wrap {
+    width: auto;
+  }
+  .introduction-content {
+    position: relative;
+    .subtitle {
+      width: 597px;
+      // height: 78px;
+      height: 32px;
+      margin-bottom: 38px;
+      background-image: url('../images/staff/subtitle.svg');
+      background-repeat: no-repeat;
+      opacity: 0;
+    }
+  }
+  .staff-content {
+    margin: auto;
+    padding: 0px 50px 0px 50px;
+    max-width: 1440px;
+    position: relative;
+    .staff-container {
+      padding-top: 110px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .left-wrap {
+      height: 446px;
+      width: 100%;
+      position: relative;
+      .charts-line {
+        opacity: 0;
+        width: 398px;
+        height: 288px;
+        // border:1px solid #eee;
+        background-image: url('../images/staff/pic8.svg');
+        background-position: -79px -63px;
+        background-repeat: no-repeat;
+        left: 162px;
+        position: absolute;
+        top: 63px;
+        box-shadow: 0 16px 80px 0 rgba(0, 0, 0, 0.05);
+      }
+      .vertical-line {
+        opacity: 0;
+        top: 57px;
+        height: 185px;
+        width: 15px;
+        right: 95.5px;
+        position: absolute;
+        background-image: url('../images/staff/pic8_2.svg');
+        background-repeat: no-repeat;
+      }
+      .charts-pie {
+        opacity: 0;
+        width: 180px;
+        height: 180px;
+        position: absolute;
+        top: 13px;
+        // left: -150px;
+        background-image: url('../images/staff/pic6.svg');
+        // background-position: -5px 0px;
+        background-repeat: no-repeat;
+      }
+      .charts-tooltip {
+        opacity: 0;
+        width: 318px;
+        height: 186px;
+        position: absolute;
+        top: 216px;
+        left: 15px;
+        background-image: url('../images/staff/pic7.svg');
+        background-position: -78px -63px;
+        background-repeat: no-repeat;
+        box-shadow: 0 16px 80px 0 rgba(0, 0, 0, 0.05);
+
+        .wrap-child {
+          height: 30px;
+          width: 270px;
+          position: relative;
+          left: 30px;
+        }
+        .bar {
+          opacity: 0;
+          background-image: url('../images/staff/pic7_2.svg');
+          // background-position: -78px -63px;
+          background-repeat: no-repeat;
+          top: 30px;
+        }
+        .line {
+          opacity: 0;
+          background-image: url('../images/staff/pic7_3.svg');
+          // background-position: -78px -63px;
+          background-repeat: no-repeat;
+          top: 48px;
+        }
+        .user {
+          opacity: 0;
+          background-image: url('../images/staff/pic7_4.svg');
+          // background-position: -78px -63px;
+          background-repeat: no-repeat;
+          top: 66px;
+        }
+      }
+    }
+    .right-wrap {
+      margin-top: 80px;
+    }
+  }
+}
+
+//animation
+.animated {
+  .staff-section {
+    .charts-line {
+      animation: fadeInLeft 0.5s ease-in-out forwards;
+    }
+    .charts-line .vertical-line {
+      animation: fadeInRight 0.37s ease-in-out forwards;
+      animation-delay: 0.45s;
+    }
+    .charts-pie {
+      animation: staffFadeInLeftTop 0.42s ease-in-out forwards;
+      animation-delay: 0.15s;
+    }
+    .charts-tooltip {
+      animation: staffFadeInLeftBottom 0.4s ease-in-out forwards;
+      animation-delay: 0.15s;
+    }
+    .charts-tooltip .bar,
+    .charts-tooltip .line,
+    .charts-tooltip .user {
+      animation: staffWrapChild 0.15s ease-in-out forwards;
+      animation-delay: 0.4s;
+    }
+    .charts-tooltip .line {
+      animation-delay: 0.52s;
+    }
+    .charts-tooltip .user {
+      animation-delay: 0.62s;
+    }
+
+    .title {
+      animation: staffFadeInDown 0.7s ease-in-out forwards;
+    }
+
+    .subtitle {
+      animation: staffSubtitleFadeInDown 0.59s ease-in-out forwards;
+      // animation-delay: 0.07s;
+    }
+
+    .introduction {
+      animation: talentSubtitleFadeInUp 0.68s ease-in-out forwards;
+      animation-delay: 0.02s;
+    }
+
+    .check-video {
+      animation: talentPlayFadeInUp 0.68s ease-in-out forwards;
+      animation-delay: 0.02s;
+    }
+    .bg-icon {
+      animation: StaffBgFadeInRight 0.48s ease-in-out forwards;
+      animation-delay: 0.02s;
+    }
+  }
+}
