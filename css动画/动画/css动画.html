@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="animate.css">
+    <style>
+        .section{
+            width: 1440px;
+            margin: 0 auto;
+            height: 660px;
+            border: 1px solid #ddd;
+        }
+        .left,
+        .right{
+            width: 50%;
+            height: 100%;
+            float: left;
+            border: 1px solid #007dff;
+            box-sizing: border-box;
+        }
+        .box{
+            width: 200px;
+            height: 100px;
+            background: #007dff;
+            box-shadow: 0 16px 80px 0 rgba(0, 0, 0, 0.05);
+        }
+        @keyframes talentFadeInDown {
+            from {
+                transform: translate(15px, -124px);
+            }
+            20% {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+        }
+        @keyframes talentSubtitleFadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 40px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        @keyframes talentPlayFadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 60px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        @keyframes salaryChartBarFadeInUp {
+            from {
+                transform: translate3d(0, 100px, 0);
+            }
+            30% {
+                opacity: 0;
+            }
+            80% {
+                opacity: 1;
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        @keyframes zoomIn {
+            from{
+                transform: scale(0.9);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+        @keyframes salaryFadeInRightBottom {
+            from {
+                opacity: 0;
+                transform: translate(100%, 50%);
+            }
+            10% {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+        }
+        .animated .title {
+            animation: talentFadeInDown 0.65s ease-in-out forwards;
+        }
+        .animated .introduction {
+            animation: talentSubtitleFadeInUp 0.59s ease-in-out forwards;
+        }
+
+        .animated .check-video {
+            animation: talentPlayFadeInUp 0.6s ease-in-out forwards;
+        }
+        .animated .box01 {
+            animation: salaryChartBarFadeInUp 0.35s ease-in-out forwards;
+            animation-delay: 0.1s;
+        }
+        .animated .box02 {
+            animation: zoomIn 0.7s ease-in-out forwards;
+        }
+        .animated .box03 {
+            animation: salaryFadeInRightBottom 0.5s ease-in-out forwards;
+        }
+    </style>
+</head>
+<body>
+<div class="section section_01 animated">
+</div>
+<div class="section section_02">
+
+</div>
+<div class="section section_03">
+    <div class="box box_03"></div>
+</div>
+<div class="section section_04">
+    <div class="left">
+        <div class="title">这是标题</div>
+        <dl>
+            <dd class="introduction">
+                <div>简单易用，告别传统复杂的薪酬报告，赋能企业管理者</div>
+                <div>进行人力资本投入的动态分析与对标，帮助其监测投入</div>
+                <div>与业务回报结果</div>
+            </dd>
+        </dl>
+        <div class="check-video">查看演示</div>
+    </div>
+    <div class="right">
+        <div class="box box01"></div>
+        <div class="box box02"></div>
+        <div class="box box03"></div>
+    </div>
+</div>
+<script src="animate.js?v=0.1"></script>
+</body>
+</html>
