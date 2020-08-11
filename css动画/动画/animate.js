@@ -1,10 +1,10 @@
 const $ = selector => document.querySelector(selector);
-const hasClass = (el,className) => !!el.className.match(new RegExp(`(\\s|^)${className}(\\s|$)`));
-const addClass = (el,className) => {
-    if(!hasClass(el,className)){
-        el.className = `${el.className} ${className}`
-    }
-};
+const $All = selector => document.querySelectorAll(selector);
+const hasClass = (el,className) => el.classList.contains(className);
+const addClass = (el,className) => el.classList.add(className);
+const is = (el,selector) => el.matches(selector);
+const getAttr = (el,attr) => el.getAttribute(attr);
+
 const throttle = (fn,wait) => {
     if(!wait) wait = 200;
     let timer = null;
@@ -20,25 +20,41 @@ const throttle = (fn,wait) => {
     }
 }
 
-// 是否进入视口
-const isInViewPort = el => {
+/**
+ *  是否进入视口
+ * @param el 当前元素
+ * @param threshold 阀值 元素进入视口距离触发
+ * @returns {boolean}
+ */
+const isInViewPort = (el,threshold = 0) => {
+    // 视口高度
     const viewPortHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    // 当前元素相对于视口的位置
     const top = el.getBoundingClientRect() && el.getBoundingClientRect().top;
-    return top  <= viewPortHeight + 100
+    return top  <= viewPortHeight - threshold
 }
+const allAnimationElement = $All('.aniview');
 
-// 元素进入视口添加动画
-const addAnimate = sectionClass => {
-    const section = $(sectionClass);
-    if(isInViewPort(section)){
-        setTimeout(() => {
-            addClass(section,'animated')
-        },1000)
-
+allAnimationElement.forEach(el => {
+    if(!hasClass(el,'animated')&&is(el,'[data-animate]')){
+        el.style.opacity = '0';
     }
-}
+})
+const renderElementInViewPort = (elements) => {
+    elements.forEach(el => {
+        if(!hasClass(el,'animated') && isInViewPort(el,100)){
+            addClass(el,'animated');
+            if(is(el,'[data-animate]')){
+                el.style.opacity = '1';
+                addClass(el,getAttr(el,'data-animate'));
+            }
+        }
+    })
+};
+
+// 默认渲染
+renderElementInViewPort(allAnimationElement);
 
 window.onscroll = throttle(()=>{
-    addAnimate('.section_03');
-    addAnimate('.section_04');
-});
+    renderElementInViewPort(allAnimationElement);
+},20);
