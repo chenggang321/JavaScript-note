@@ -7,7 +7,7 @@
  * */
 
 //将观察者模式放在闭包中，当页面加载就立即执行
-var Observer = (function () {
+/*var Observer = (function () {
     //防止信息队列暴露而被篡改故将信息容器作为静态私有变量保存
     var __messages = {};
     return {
@@ -67,7 +67,7 @@ Observer //注册接口 test test1
 Observer.remove('test', show);//注销接口test
 Observer //执行接口 test test1
     .fire('test', {msg: '传递参数'})
-    .fire('test1', {msg: '传递参数1'});//test1 传递参数1
+    .fire('test1', {msg: '传递参数1'});//test1 传递参数1*/
 
 /*
 *  es6 改写
@@ -108,16 +108,16 @@ class ObserverEs6 {
     }
 }
 
-const observerEs6 = new ObserverEs6();
+/*const observerEs6 = new ObserverEs6();
 observerEs6 //注册接口 test test1
     .regist('test', show)
     .regist('test1', show);
 observerEs6.remove('test', show);//注销接口test
 observerEs6 //执行接口 test test1
     .fire('test', {msg: '传递参数'})
-    .fire('test1', {msg: '传递参数1'});//test1 传递参数1
+    .fire('test1', {msg: '传递参数1'});//test1 传递参数1*/
 
-//外观模式 简化获取元素
+/*//外观模式 简化获取元素
 function $(id) {
     return document.getElementById(id);
 }
@@ -194,5 +194,126 @@ function $(id) {
         });
         text.value = '';//将输入框置为空
     }
+})();*/
+
+
+/*
+* 观察者模式的定义
+* 所谓的观察者模式指的是一种一对多的关系，我们把其中的一叫做Subject，
+* 把其中的多叫做Observer，也就是观察者。因为多个Observer
+* 的变动依赖Subject的状态更新，所以Subject在内部维护了一个Observer的列表，一旦Subject
+* 的状态有更新，就会遍历这个列表，通知列表中每一个Observer进行相应的更新。因为有了这个列
+* 表，Subject就可以对这个列表进行增删改查的操作。也就实现了Observer对Subject依赖的更新和解绑。
+* */
+
+// subject
+class Subject {
+    constructor(){
+        this.observerCollection = [];
+    }
+
+    register(observer){
+        this.observerCollection.push(observer);
+    }
+
+    unregister(observer){
+        const observerIndex = this.observerCollection.indexOf(observer)
+        this.observerCollection.splice(observerIndex,1);
+    }
+    notify(subject){
+        this.observerCollection.forEach(observer => {
+            observer.update(subject)
+        })
+    }
+}
+
+// Observer
+class Observer {
+    update(){}
+}
+
+//外观模式 简化获取元素
+function $(id) {
+    return document.getElementById(id);
+}
+
+(function () {
+    var html = `
+    <div class="container">
+        <span id="msg_num">0</span>
+        <div id="msg"></div>
+        <div>
+            <input type="text" id="user_input">
+            <button id="user_submit">提交</button>
+        </div>
+    </div>
+    `;
+    document.body.innerHTML = html;
 })();
+//工程师 A
+/*(function () {
+    //追加一则消息
+    function addMsgItem(e) {
+        var text = e.args.text,//获取消息中用户添加的文本内容
+            ul = $('msg'),//留言容器元素
+            li = document.createElement('li'),//创建内容容器元素
+            span = document.createElement('span');//删除按钮
+        span.innerHTML = '删除';
+        li.innerHTML = text;//写入评论
+        //关闭按钮
+        span.onclick = function () {
+            ul.removeChild(li);//移出留言
+            //发布删除留言信息
+            /!*observerEs6.fire('removeCommentMessage', {
+                num: -1
+            });*!/
+        };
+        //添加删除按钮
+        li.appendChild(span);
+        //添加留言节点
+        ul.appendChild(li);
+    }
+
+    //注册添加评论信息
+    /!*observerEs6.regist('addCommentMessage', addMsgItem);*!/
+})();*/
+//工程师B
+/*(function () {
+    //修改用户信息数目
+    function changgeMesNum(e) {
+        //获取需要增加信息数目
+        var num = e.args.num;
+        //增加用户信息并写入页面中
+        $('msg_num').innerHTML = parseInt($('msg_num').innerHTML) + num;
+    }
+
+    //注册添加评论信息
+    observerEs6
+        .regist('addCommentMessage', changgeMesNum)
+        .regist('removeCommentMessage', changgeMesNum);
+})();*/
+//工程师C
+(function () {
+    //用户点击提交按钮
+    $('user_submit').onclick = function () {
+        //获取用户输入框中的信息
+        var text = $('user_input');
+        //如果空则提交失败
+        if (text.value === '') {
+            return;
+        }
+        //发布则评论消息
+        /*observerEs6.fire('addCommentMessage', {
+            text: text.value,//消息评论内容
+            num: 1//消息评论数目
+        });*/
+        console.log(text);
+        text.value = '';//将输入框置为空
+    }
+})();
+
+
+
+
+
 
