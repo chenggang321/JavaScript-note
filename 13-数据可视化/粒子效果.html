@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            height: 100%;
+            background-image: -webkit-radial-gradient(ellipse farthest-corner at center center, #1b44e4 0%, #020f3a 100%);
+            background-image: radial-gradient(ellipse farthest-corner at center center, #1b44e4 0%, #020f3a 100%);
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+    let num = 200;
+    let w = window.innerWidth;
+    let h = window.innerHeight;
+    let max = 100;
+    let _x = 0;
+    let _y = 0;
+    let _z = 150;
+
+    // 角度转弧度
+    const dtr = function (d) {
+        return d * Math.PI / 180;
+    };
+
+    const rnd = function () {
+        return Math.sin(Math.floor(Math.random() * 360) * Math.PI / 180);
+    };
+
+    // 两点间距离
+    const dist = function (p1, p2, p3) {
+        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2) + Math.pow(p2.z - p1.z, 2));
+    };
+
+    const cam = {
+        obj: {
+            x: _x,
+            y: _y,
+            z: _z
+        },
+        dest: {
+            x: 0,
+            y: 0,
+            z: 1
+        },
+        dist: {
+            x: 0,
+            y: 0,
+            z: 1000
+        },
+        ang: {
+            cplane: 0,
+            splane: 0,
+            ctheta: 0,
+            stheta: 0
+        },
+        zoom: 1,
+        disp: {
+            x: w / 2,
+            y: h / 2,
+            z: 0
+        },
+        upd: function () {
+            cam.dist.x = cam.dest.x - cam.obj.x;
+            cam.dist.y = cam.dest.y - cam.obj.y;
+            cam.dist.z = cam.dest.z - cam.obj.z;
+            cam.ang.cplane = -cam.dist.z / Math.sqrt(cam.dist.x * cam.dist.x + cam.dist.z * cam.dist.z);
+            cam.ang.splane = cam.dist.x / Math.sqrt(cam.dist.x * cam.dist.x + cam.dist.z * cam.dist.z);
+            cam.ang.ctheta = Math.sqrt(cam.dist.x * cam.dist.x + cam.dist.z * cam.dist.z) / Math.sqrt(cam.dist.x * cam.dist.x + cam.dist.y * cam.dist.y + cam.dist.z * cam.dist.z);
+            cam.ang.stheta = -cam.dist.y / Math.sqrt(cam.dist.x * cam.dist.x + cam.dist.y * cam.dist.y + cam.dist.z * cam.dist.z);
+        }
+    };
+
+    // 旋转类
+    class Rot {
+        x(p, rot) {
+            return {
+                x: p.x,
+                y: p.y * Math.cos(dtr(rot.x)) - p.z * Math.sin(dtr(rot.x)),
+                z: p.y * Math.sin(dtr(rot.x)) + p.z * Math.cos(dtr(rot.x))
+            };
+        }
+
+        y(p, rot) {
+            return {
+                x: p.x * Math.cos(dtr(rot.y)) + p.z * Math.sin(dtr(rot.y)),
+                y: p.y,
+                z: -p.x * Math.sin(dtr(rot.y)) + p.z * Math.cos(dtr(rot.y))
+            };
+        }
+
+        z(p, rot) {
+            return {
+                x: p.x * Math.cos(dtr(rot.z)) - p.y * Math.sin(dtr(rot.z)),
+                y: p.x * Math.sin(dtr(rot.z)) + p.y * Math.cos(dtr(rot.z)),
+                z: p.z
+            };
+        }
+    }
+
+    // 图形变换
+    class Parts {
+        constructor() {
+            // 旋转
+            this.rot = new Rot();
+        }
+
+        // 缩放
+        sz(p, sz) {
+            return {
+                x: p.x * sz.x,
+                y: p.y * sz.y,
+                z: p.z * sz.z
+            };
+        }
+
+        // 平移
+        pos(p, pos) {
+            return {
+                x: p.x + pos.x,
+                y: p.y + pos.y,
+                z: p.z + pos.z
+            };
+        }
+    }
+
+    class Pov {
+        plane(p) {
+            return {
+                x: p.x * cam.ang.cplane + p.z * cam.ang.splane,
+                y: p.y,
+                z: p.x * -cam.ang.splane + p.z * cam.ang.cplane
+            };
+        }
+
+        theta(p) {
+            return {
+                x: p.x,
+                y: p.y * cam.ang.ctheta - p.z * cam.ang.stheta,
+                z: p.y * cam.ang.stheta + p.z * cam.ang.ctheta
+            };
+        }
+
+        set(p) {
+            return {
+                x: p.x - cam.obj.x,
+                y: p.y - cam.obj.y,
+                z: p.z - cam.obj.z
+            };
+        }
+    }
+
+    class Trans {
+        constructor() {
+            this.parts = new Parts();
+            this.pov = new Pov()
+        }
+
+        persp(p) {
+            return {
+                x: p.x * cam.dist.z / p.z * cam.zoom,
+                y: p.y * cam.dist.z / p.z * cam.zoom,
+                z: p.z * cam.zoom,
+                p: cam.dist.z / p.z
+            };
+        }
+
+        disp(p, disp) {
+            return {
+                x: p.x + disp.x,
+                y: -p.y + disp.y,
+                z: p.z + disp.z,
+                p: p.p
+            };
+        }
+
+        steps(_obj_, sz, rot, pos, disp) {
+            let _args = this.parts.sz(_obj_, sz);
+            _args = this.parts.rot.x(_args, rot);
+            _args = this.parts.rot.y(_args, rot);
+            _args = this.parts.rot.z(_args, rot);
+            _args = this.parts.pos(_args, pos);
+            _args = this.pov.plane(_args);
+            _args = this.pov.theta(_args);
+            _args = this.pov.set(_args);
+            _args = this.persp(_args);
+            _args = this.disp(_args, disp);
+            return _args;
+        }
+    }
+
+    class ThreeD {
+        constructor(param) {
+            this.transIn = {};
+            this.transOut = {};
+            this.transIn.vtx = (param.vtx);
+            this.transIn.sz = (param.sz);
+            this.transIn.rot = (param.rot);
+            this.transIn.pos = (param.pos);
+            this.trans = new Trans()
+        }
+
+        vupd() {
+            this.transOut = this.trans.steps(
+                this.transIn.vtx,
+                this.transIn.sz,
+                this.transIn.rot,
+                this.transIn.pos,
+                cam.disp
+            );
+        }
+    }
+
+    class Build {
+        constructor() {
+            this.vel = 0.04;
+            this.lim = 360;
+            this.diff = 200;
+            this.toX = _x;
+            this.toY = _y;
+            this.letr = [];
+            this.calc = [];
+            this.canvas = document.getElementById('canvas');
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            this.$ = this.canvas.getContext('2d');
+            this.$.globalCompositeOperation = 'source-over';
+            for (let i = 0, len = num; i < len; i++) {
+                this.add();
+            }
+            this.rotObj = {
+                x: 0,
+                y: 0,
+                z: 0
+            };
+            this.objSz = {
+                x: w / 5,
+                y: h / 5,
+                z: w / 5
+            };
+        }
+
+        add() {
+            this.letr.push(new ThreeD({
+                // 随机坐标
+                vtx: {
+                    x: rnd(),
+                    y: rnd(),
+                    z: rnd()
+                },
+                sz: {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                },
+                rot: {
+                    x: 20,
+                    y: -20,
+                    z: 0
+                },
+                pos: {
+                    x: this.diff * Math.sin(360 * Math.random() * Math.PI / 180),
+                    y: this.diff * Math.sin(360 * Math.random() * Math.PI / 180),
+                    z: this.diff * Math.sin(360 * Math.random() * Math.PI / 180)
+                }
+            }))
+            this.calc.push({
+                x: 360 * Math.random(),
+                y: 360 * Math.random(),
+                z: 360 * Math.random()
+            });
+        }
+
+        upd() {
+            cam.obj.x += (this.toX - cam.obj.x) * 0.05;
+            cam.obj.y += (this.toY - cam.obj.y) * 0.05;
+        }
+
+        draw() {
+            this.$.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            cam.upd();
+            this.rotObj.x += 0.1;
+            this.rotObj.y += 0.1;
+            this.rotObj.z += 0.1;
+            this.letr.forEach((l,i) => {
+                Object.keys(this.calc[i]).forEach(key => {
+                    this.calc[i][key] += this.vel;
+                    if (this.calc[i][key] > this.lim) this.calc[i][key] = 0;
+                })
+                l.transIn.pos = {
+                    x: this.diff * Math.cos(this.calc[i].x * Math.PI / 180),
+                    y: this.diff * Math.sin(this.calc[i].y * Math.PI / 180),
+                    z: this.diff * Math.sin(this.calc[i].z * Math.PI / 180)
+                }
+                l.transIn.rot = this.rotObj;
+                l.transIn.sz = this.objSz;
+                l.vupd();
+                if (l.transOut.p > 0) this.buildSphere(this.letr[i].transOut,i);
+            })
+        }
+
+        /**
+         * 创建小球
+         * @param x 圆的横坐标
+         * @param y 圆的纵坐标
+         * @param p 圆的半径
+         * @param i 创建的数据位置
+         */
+        buildSphere({x,y,p},i=1) {
+            /*
+            * 创建放射状/圆形渐变对象。
+            * context.createRadialGradient(x0,y0,r0,x1,y1,r1);
+            * x0	渐变的开始圆的 x 坐标
+            * y0	渐变的开始圆的 y 坐标
+            * r0	开始圆的半径
+            * x1	渐变的结束圆的 x 坐标
+            * y1	渐变的结束圆的 y 坐标
+            * r1	结束圆的半径
+            * */
+            let g = this.$.createRadialGradient(x, y, p, x, y, p * 2);
+            this.$.globalCompositeOperation = 'lighter';
+            g.addColorStop(0, 'hsla(255, 255%, 255%, 1)');
+            g.addColorStop(.5, 'hsla(' + (i + 2) + ',85%, 40%,1)');
+            g.addColorStop(1, 'hsla(' + (i) + ',85%, 40%,.5)');
+            this.$.fillStyle = g;
+            this.$.beginPath();
+            /*
+             *  画圆
+             * context.arc(x,y,r,sAngle,eAngle,counterclockwise);
+             * x	圆的中心的 x 坐标。
+             * y	圆的中心的 y 坐标。
+             * r	圆的半径。
+             * sAngle	起始角，以弧度计。（弧的圆形的三点钟位置是 0 度）。
+             * eAngle	结束角，以弧度计。
+             * counterclockwise	可选。规定应该逆时针还是顺时针绘图。False = 顺时针，true = 逆时针。
+             * */
+            this.$.arc(x, y, p * 2, 0, Math.PI * 2, false);
+            this.$.fill();
+            this.$.closePath();
+        }
+
+        anim() {
+            window.requestAnimationFrame = (function () {
+                return window.requestAnimationFrame ||
+                    function (callback, element) {
+                        window.setTimeout(callback, 1000 / 60);
+                    };
+            })();
+
+            let anim = function () {
+                this.upd();
+                this.draw();
+                window.requestAnimationFrame(anim);
+
+            }.bind(this);
+            window.requestAnimationFrame(anim);
+        }
+
+        run() {
+            this.anim();
+            window.addEventListener('mousemove', function (e) {
+                this.toX = (e.clientX - this.canvas.width / 2) * -0.8;
+                this.toY = (e.clientY - this.canvas.height / 2) * 0.8;
+            }.bind(this));
+            window.addEventListener('touchmove', function (e) {
+                e.preventDefault();
+                this.toX = (e.touches[0].clientX - this.canvas.width / 2) * -0.8;
+                this.toY = (e.touches[0].clientY - this.canvas.height / 2) * 0.8;
+            }.bind(this));
+            window.addEventListener('mousedown', function (e) {
+                /*for (let i = 0; i < 100; i++) {
+                    this.add();
+                }*/
+            }.bind(this));
+            window.addEventListener('touchstart', function (e) {
+                e.preventDefault();
+                for (let i = 0; i < 100; i++) {
+                    this.add();
+                }
+            }.bind(this));
+            window.addEventListener('resize', function () {
+                canvas.width = w = window.innerWidth;
+                canvas.height = h = window.innerHeight;
+            }, false);
+        }
+    }
+
+    const build = new Build();
+    build.run();
+</script>
+</body>
+</html>
