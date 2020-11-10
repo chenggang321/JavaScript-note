@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    /**
+     <canvas id='canvas' width='500' height='500'></canvas>
+     [注]
+     设置canvas的宽高要在元素或在其API，canvas.width || canvas.height，在CSS上设置为得到意想不到的结果，不信试试看哈···
+
+     //demo.js
+     var canvas = document.getElementById('canvas');
+     var context = canvas.getContext('2d');
+
+     //路径或图形
+     context.fillRect();//填充矩形
+     context.strokeRect();//勾勒矩形轮廓
+     context.arc(x,y,r,anglestart,angleend,clockwise);//画弧形
+
+     context.beginPath();//开始路径
+     context.moveTo();//定义路径起始点
+     context.lineTo();//路径的去向
+     context.closePath();//画完后，关闭路径
+     context.fill() || context.stroke();//最后画出由路径构成的图形
+     [注]
+     本质上，所有的多边形都可以由路径画出；
+
+     context.save();//保存save以上context对象设置的属性值
+     context.restore();//恢复到先前保存在context对象上的所有属性值
+
+     */
+</script>
+
+<!--线性运动-->
+<canvas id="canvas01" width="500" height="500" style="background: #000"></canvas>
+<script>
+    class Ball {
+        constructor() {
+            this.x = 0;
+            this.y = 0;
+            this.r = 50;
+        }
+        draw(context){
+            context.beginPath();
+            context.fillStyle = 'red';
+            context.arc(this.x,this.y,this.r,0,2*Math.PI,true);
+            context.fill();
+            context.closePath();
+        }
+    }
+</script>
+<script>
+    let canvas01 = document.getElementById('canvas01');
+    (function drawFrame({width,height,context,ball,xspeed}){
+        window.requestAnimationFrame(() => drawFrame({width,height,context,ball,xspeed}));
+        context.clearRect(0,0,width,height);
+
+        ball.x += xspeed;
+        ball.y = height/2;
+
+        if(ball.x>width+ball.r){
+            ball.x = -ball.r;
+        }
+
+        ball.draw(context);
+    })({
+        width:canvas01.width,
+        height:canvas01.height,
+        context:canvas01.getContext('2d'),
+        ball:new Ball(),
+        xspeed:1
+    });
+</script>
+
+<!--加速运动-->
+<!--<canvas id="canvas02" width="500" height="500" style="background: #000"></canvas>
+<script>
+    let canvas02 = document.getElementById('canvas02');
+
+    (function drawFrame({width,height,context,ball,xspeed,ax}){
+        window.requestAnimationFrame(() => drawFrame({width,height,context,ball,xspeed,ax}));
+        context.clearRect(0,0,width,height);
+
+        ball.x += xspeed;
+
+        ball.y = height/2;
+        xspeed += ax;
+        if(ball.x>width+ball.r){
+            ball.x = -ball.r;
+        }
+
+        ball.draw(context);
+    })({
+        width:canvas02.width,
+        height:canvas02.height,
+        context:canvas02.getContext('2d'),
+        ball:new Ball(),
+        xspeed:1,
+        ax: 0.5
+    });
+</script>-->
+
+<!--自由落体-->
+<canvas id="canvas03" width="500" height="500" style="background: #000"></canvas>
+<script>
+    let canvas03 = document.getElementById('canvas03');
+    (function drawFrame({width,height,context,ball,vy,gravity,bounce}){
+        window.requestAnimationFrame(() => drawFrame({width,height,context,ball,vy,gravity,bounce}));
+        context.clearRect(0,0,width,height);
+
+        ball.x = width/2;
+        //小球首先做向下的加速运动
+        vy += gravity;
+        ball.y += vy;
+
+        // 碰撞判断
+        if(ball.y+ball.r>height){
+            //小球碰到地面时，让球的位置暂时设置为在地面上
+            ball.y = height - ball.r;
+            //此时设置小球落到地面时的速度为反向，大小为原来的0.8；
+            vy *= bounce;
+        }
+
+        ball.draw(context);
+    })({
+        width:canvas03.width,
+        height:canvas03.height,
+        context:canvas03.getContext('2d'),
+        ball:new Ball(),
+        vy:0, // 垂直方向初速度
+        gravity: 0.1, // 定义重力加速度
+        bounce:-0.8, // 反弹系数
+    });
+</script>
+</body>
+</html>

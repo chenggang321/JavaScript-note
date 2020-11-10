@@ -40,11 +40,6 @@
         return Math.sin(Math.floor(Math.random() * 360) * Math.PI / 180);
     };
 
-    // 两点间距离
-    const dist = function (p1, p2, p3) {
-        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2) + Math.pow(p2.z - p1.z, 2));
-    };
-
     const cam = {
         obj: {
             x: _x,
