@@ -33,25 +33,63 @@
 
      */
 </script>
-
-<!--线性运动-->
-<canvas id="canvas01" width="500" height="500" style="background: #000"></canvas>
 <script>
     class Ball {
         constructor() {
             this.x = 0;
             this.y = 0;
             this.r = 50;
+            this.rotation = 0;
+            this.scaleX = 1;
+            this.scaleY = 1
+            this.color = 'red'
         }
         draw(context){
+            context.save();
+            context.translate(this.x,this.y);
+            context.rotate(this.rotation);
+            context.scale(this.scaleX,this.scaleY);
+            context.fillStyle = this.color;
             context.beginPath();
-            context.fillStyle = 'red';
-            context.arc(this.x,this.y,this.r,0,2*Math.PI,true);
-            context.fill();
+            context.arc(0,0,this.r,0,2*Math.PI,true);
             context.closePath();
+            context.fill();
+            context.stroke();
+            context.restore();
+        }
+    }
+
+    class Arrow {
+        constructor() {
+            this.x = 0;
+            this.y = 0;
+            this.rotation = 0; // 旋转角度
+            this.color = 'red'
+        }
+        draw(context){
+            context.save();
+            context.translate(this.x,this.y);
+            context.rotate(this.rotation);
+            context.lineWidth = 5;
+            context.fillStyle = this.color;
+            context.beginPath();
+            context.moveTo(-50,-25);
+            context.lineTo(0,-25);
+            context.lineTo(0,-50);
+            context.lineTo(50,0);
+            context.lineTo(0,50);
+            context.lineTo(0,25);
+            context.lineTo(-50,25);
+            context.lineTo(-50,25);
+            context.closePath();
+            context.stroke();
+            context.fill();
+            context.restore();
         }
     }
 </script>
+<!--线性运动-->
+<canvas id="canvas01" width="500" height="500" style="background: #000"></canvas>
 <script>
     let canvas01 = document.getElementById('canvas01');
     (function drawFrame({width,height,context,ball,xspeed}){
@@ -133,6 +171,182 @@
         vy:0, // 垂直方向初速度
         gravity: 0.1, // 定义重力加速度
         bounce:-0.8, // 反弹系数
+    });
+</script>
+
+<!--波形运动-->
+<canvas id="canvas04" width="500" height="500" style="background: #000"></canvas>
+<script>
+    let canvas04 = document.getElementById('canvas04');
+    (function drawFrame({width,height,context,ball,angle,swing}){
+        window.requestAnimationFrame(() => drawFrame({width,height,context,ball,angle,swing}));
+        context.clearRect(0,0,width,height);
+
+        ball.x += 2;
+        ball.y = height/2+Math.sin(angle)*swing;
+        angle += 0.1;
+
+        if(ball.x>width+ball.r){
+            ball.x = -ball.r;
+        }
+
+        ball.draw(context);
+    })({
+        width:canvas04.width,
+        height:canvas04.height,
+        context:canvas04.getContext('2d'),
+        ball:new Ball(),
+        angle:0, // 角度
+        swing: 100, // 振幅
+    });
+</script>
+<!--圆形运动-->
+<canvas id="canvas05" width="500" height="500" style="background: #000"></canvas>
+<script>
+    let canvas05 = document.getElementById('canvas05');
+    (function drawFrame({width,height,context,ball,angle,scope}){
+        window.requestAnimationFrame(() => drawFrame({width,height,context,ball,angle,scope}));
+        context.clearRect(0,0,width,height);
+
+        ball.x = width/2+Math.cos(angle)*scope;
+        ball.y = height/2+Math.sin(angle)*scope;
+        angle += 0.1;
+
+        ball.draw(context);
+    })({
+        width:canvas05.width,
+        height:canvas05.height,
+        context:canvas05.getContext('2d'),
+        ball:new Ball(),
+        angle:0, // 角度
+        scope: 100, // 旋转半径
+    });
+</script>
+
+<!--椭圆运动-->
+<canvas id="canvas06" width="500" height="500" style="background: #000"></canvas>
+<script>
+    let canvas06 = document.getElementById('canvas06');
+    (function drawFrame({width,height,context,ball,angle,scopeX,scopeY}){
+        window.requestAnimationFrame(() => drawFrame({width,height,context,ball,angle,scopeX,scopeY}));
+        context.clearRect(0,0,width,height);
+
+        ball.x = width/2+Math.cos(angle)*scopeX;
+        ball.y = height/2+Math.sin(angle)*scopeY;
+        angle += 0.1;
+
+        ball.draw(context);
+    })({
+        width:canvas06.width,
+        height:canvas06.height,
+        context:canvas06.getContext('2d'),
+        ball:new Ball(),
+        angle:0, // 角度
+        scopeX: 150, // 旋转X半径
+        scopeY: 80, // 旋转Y半径
+    });
+</script>
+
+<!--自转-->
+<canvas id="canvas07" width="500" height="500" style="background: #000"></canvas>
+<script>
+    let canvas07 = document.getElementById('canvas07');
+    (function drawFrame({width,height,context,arrow,angle}){
+        window.requestAnimationFrame(() => drawFrame({width,height,context,arrow,angle}));
+        context.clearRect(0,0,width,height);
+
+        arrow.x = width/2;
+        arrow.y = height/2;
+        arrow.rotation = angle;
+        angle +=0.1;
+
+        arrow.draw(context);
+    })({
+        width:canvas07.width,
+        height:canvas07.height,
+        context:canvas07.getContext('2d'),
+        arrow:new Arrow(),
+        angle:0, // 角度
+    });
+</script>
+
+<!--跟随鼠标转动-->
+<canvas id="canvas08" width="500" height="500" style="background: #000"></canvas>
+<script>
+    let canvas08 = document.getElementById('canvas08');
+    // 监听鼠标相对于元素移动位置
+    function captureMouse(element) {
+        let mouse = {
+            x: 0,
+            y: 0
+        };
+
+        element.addEventListener('mousemove', function(event) {
+            let x, y;
+            if (event.pageX || event.pageY) {
+                x = event.pageX;
+                y = event.pageY;
+            } else {
+                x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+            }
+
+            let Box = element.getBoundingClientRect();
+
+            x = (x - Box.left) * (element.width / Box.width);
+            y = (y - Box.top) * (element.height / Box.height);
+
+            mouse.x = x;
+            mouse.y = y;
+        }, false);
+
+        return mouse;
+    }
+    (function drawFrame({width,height,context,arrow,angle,mouse}){
+        window.requestAnimationFrame(() => drawFrame({width,height,context,arrow,angle,mouse}));
+        context.clearRect(0,0,width,height);
+
+        arrow.x = width/2;
+        arrow.y = height/2;
+        let dx = mouse.x - arrow.x;
+        let dy = mouse.y - arrow.y;
+        angle = Math.atan2(dy,dx);
+        arrow.rotation = angle;
+
+        arrow.draw(context);
+    })({
+        width:canvas08.width,
+        height:canvas08.height,
+        context:canvas08.getContext('2d'),
+        arrow:new Arrow(),
+        angle:0, // 角度
+        mouse: captureMouse(canvas08)
+    });
+</script>
+
+<!--缩放比例-->
+<canvas id="canvas09" width="500" height="500" style="background: #000"></canvas>
+<script>
+    let canvas09 = document.getElementById('canvas09');
+    (function drawFrame({width,height,context,ball,angle,centerScale,swing}){
+        window.requestAnimationFrame(() => drawFrame({width,height,context,ball,angle,centerScale,swing}));
+        context.clearRect(0,0,width,height);
+
+        ball.x = width/2;
+        ball.y = height/2;
+        angle += 0.05
+
+        ball.scaleX = ball.scaleY = centerScale + Math.sin(angle)*swing;
+
+        ball.draw(context);
+    })({
+        width:canvas09.width,
+        height:canvas09.height,
+        context:canvas09.getContext('2d'),
+        ball:new Ball(),
+        angle:0, // 角度
+        centerScale: 1,
+        swing: 0.5
     });
 </script>
 </body>
