@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.1/echarts.min.js"></script>
+    <script src="walden.js"></script>
+</head>
+<body>
+<div id="echarts" style="width: 600px;height:400px"></div>
+<script>
+    var chartDom = document.getElementById('echarts');
+    var myChart = echarts.init(chartDom, 'walden');
+    var option;
+
+    var data = 308; //数值大小
+    var max = 500; //满刻度大小
+    option = {
+        backgroundColor: '#fff',
+        "color": ["#009FE3", '#009FE3', '#81C6E3'],
+        "series": [{
+            "type": "pie",
+            "center": ["50%", "50%"],
+            "radius": ["48%", "50%"],
+            "hoverAnimation": false,
+            "data": [{
+                "name": "",
+                "value": data,
+                "label": {
+                    "show": true,
+                    "position": "center",
+                    "color": "#fff",
+                    "fontSize": 38,
+                    "fontWeight": "bold",
+                    "formatter": function(o) {
+                        return data
+                    }
+                }
+            },
+                { //画中间的图标
+                    "name": "",
+                    "value": 0,
+                    "label": {
+                        position: 'inside',
+                        backgroundColor: '#009FE3',
+                        width: 30,
+                        height: 30,
+                        borderRadius: 15,
+                        textShadowColor: '#009FE3' ,
+                        textShadowBlur: 5 ,
+                        // padding: 10
+                    }
+                }, { //画剩余的刻度圆环
+                    "name": "",
+                    "value": max - data,
+                    "label": {
+                        show: false
+                    }
+                }
+            ]
+        }]
+    }
+
+    option && myChart.setOption(option);
+</script>
+</body>
+</html>
