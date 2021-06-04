@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sticky Footer</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header,footer{
+            height: 60px;
+            line-height: 60px;
+            background: #0f5aff;
+        }
+        section{
+            flex: auto;
+        }
+    </style>
+</head>
+<body>
+<!--1当页面内容高度小于可视区域高度时，footer 吸附在底部；
+2当页面内容高度大于可视区域高度时，footer 被撑开排在 content 下方-->
+<header>header</header>
+<section>content</section>
+<footer>footer</footer>
+</body>
+</html>

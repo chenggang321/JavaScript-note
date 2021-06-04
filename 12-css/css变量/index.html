@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        :root {
+            --main-bg-color: red;
+        }
+
+        :root[data-theme='blue'] {
+            --main-bg-color: blue;
+        }
+
+        :root[data-theme='green'] {
+            --main-bg-color: green;
+        }
+
+        .box {
+            width: 400px;
+            height: 400px;
+            background: var(--main-bg-color);
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="box"></div>
+    <div onclick="setCssVar('blue')">blue</div>
+    <div onclick="setCssVar('green')">green</div>
+</div>
+<script>
+    function setCssVar(theme) {
+        document.documentElement.dataset.theme = theme
+    }
+</script>
+</body>
+</html>

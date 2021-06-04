@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sidebar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            display: flex;
+        }
+        aside{
+            flex: 0 0 200px;
+            background: lightcoral;
+        }
+        .content{
+            display: flex;
+            flex: auto;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header,footer{
+            height: 60px;
+            line-height: 60px;
+            background: #0f5aff;
+        }
+        section{
+            flex: auto;
+        }
+    </style>
+</head>
+<body>
+<aside>aside</aside>
+<div class="content">
+    <header>header</header>
+    <section>content</section>
+    <footer>footer</footer>
+</div>
+</body>
+</html>

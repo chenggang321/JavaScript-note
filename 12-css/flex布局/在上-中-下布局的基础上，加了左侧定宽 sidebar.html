@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fixed-Width Sidebar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header,footer{
+            height: 60px;
+            line-height: 60px;
+            background: #0f5aff;
+        }
+
+        .content{
+            display: flex;
+            flex: auto;
+        }
+
+        aside{
+            flex: 0 0 200px;
+            background: lawngreen;
+        }
+        section{
+            flex: auto;
+        }
+    </style>
+</head>
+<body>
+
+<header>header</header>
+<div class="content">
+    <aside>aside</aside>
+    <section>content</section>
+</div>
+<footer>footer</footer>
+
+</body>
+</html>
