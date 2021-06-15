@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .container {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            grid-gap: 10px;
+            /* row:先行后列, couum:先烈后行
+               row dense/column dense： 表示某些项目指定位置以后，剩下的项目怎么自动放置
+            */
+            grid-auto-flow: row;
+            /*grid-template-areas: 网格布局允许指定区域，一个区域可以又多个单元格*/
+            grid-template-areas: 'a b c'
+                                 'd e f'
+                                 'g h i';
+        }
+
+        .container div {
+            /*height: 100px;*/
+            font-size: 4em;
+            justify-items: center;
+            align-items: center;
+            /*margin: 10px;*/
+            /*border: 1px solid red;*/
+            background-color: #fce8a1;
+        }
+
+        .item-1 {
+            /*和grid-template-areas配套使用，指定项目放在哪一个区域*/
+            grid-area: e;
+        }
+
+        .item-2 {
+            /* grid-column: 表示从第几个垂直网格线开始到第几个垂直网格线结束*/
+            /* 可以直接用grid-column: span 2; 表示占两列单元格*/
+            grid-column-start: 1;
+            grid-column-end: 3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="item-1">1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+</body>
+</html>
