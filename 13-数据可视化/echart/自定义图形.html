@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.1/echarts.min.js"></script>
+    <script src="walden.js"></script>
+</head>
+<body>
+<div id="echarts" style="width: 600px;height:400px"></div>
+<script>
+    var chartDom = document.getElementById('echarts');
+    var myChart = echarts.init(chartDom, 'walden');
+    var option;
+
+    option = {
+        // 标题
+        title:{
+            text:'标题',
+            textStyle:{
+                fontWeight:'normal'
+            },
+            subtext:'副标题'
+        },
+        // 提示框
+        tooltip:{},
+        // 图例
+        legend:{
+            data:['销量']
+        },
+        // x 轴
+        xAxis: {
+            type: 'category',
+            data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+        },
+        // y 轴
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+        //     {
+        //     name:'销量',
+        //     data: [120, 200, 150, 80, 70, 110, 130],
+        //     type: 'bar'
+        // },
+            {
+            type: 'custom',
+            renderItem(params,api){
+                var categoryIndex = api.value(0);
+
+                var point = api.coord([categoryIndex, api.value(1)]);
+
+                // 这里使用 api.size(...) 获得 X 轴上数值范围为 1 的一段所对应的像素长度。
+                var width =  api.size([1, 0])[0] * 0.6;
+
+                var shape = {
+                    // 矩形的位置和大小。
+                    x: point[0] - width/2,
+                    y: point[1],
+                    width: width,
+                    height: api.size([0, api.value(1)])[1]
+                }
+
+                // 裁剪超出坐标系部分
+                shape = echarts.graphic.clipRectByRect(shape, {
+                    // 当前坐标系的包围盒。
+                    x: params.coordSys.x,
+                    y: params.coordSys.y,
+                    width: params.coordSys.width,
+                    height: params.coordSys.height
+                })
+
+
+                console.log(shape)
+
+                return {
+                    type: 'rect',
+                    shape: shape,
+                    style: api.style()
+                }
+            },
+            data: [{value: 100,itemStyle:{color: '#f00'}}, 200, 150, 80, 70, 110, 130],
+        }]
+    };
+
+    option && myChart.setOption(option);
+</script>
+</body>
+</html>
