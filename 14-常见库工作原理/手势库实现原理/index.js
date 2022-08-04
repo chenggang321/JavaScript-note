@@ -23,12 +23,12 @@ import {
 } from './vector.js'
 
 // *** 注意: touch-action未兼容
-import TapRecognizer from './recognitions/Tap';
-import PressRecognizer from './recognitions/Press';
-import PanRecognizer from './recognitions/Pan';
-import SwipeRecognizer from './recognitions/Swipe';
-import PinchRecognizer from './recognitions/Pinch';
-import RotateRecognizer from './recognitions/Rotate';
+import TapRecognizer from './recognitions/Tap.js';
+import PressRecognizer from './recognitions/Press.js';
+import PanRecognizer from './recognitions/Pan.js';
+import SwipeRecognizer from './recognitions/Swipe.js';
+import PinchRecognizer from './recognitions/Pinch.js';
+import RotateRecognizer from './recognitions/Rotate.js';
 
 
 export default class Touch2 {

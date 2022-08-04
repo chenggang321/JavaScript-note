@@ -1,6 +1,6 @@
 import {
   round
-} from '../utils'
+} from '../utils.js'
 import {
   getCenter,
   getAngle

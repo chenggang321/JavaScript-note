@@ -1,4 +1,4 @@
-import {round} from '../utils'
+import {round} from '../utils.js'
 export default class PanRecognizer {
 
   constructor() {
