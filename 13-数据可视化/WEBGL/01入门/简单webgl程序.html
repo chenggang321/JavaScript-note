@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<!-- 顶点着色器 -->
+<script id="vertexShader" type="x-shader/x-vertex">
+    void main() {
+        gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+        gl_PointSize = 100.0;
+    }
+</script>
+<!-- 片元着色器 -->
+<script id="fragmentShader" type="x-shader/x-fragment">
+    void main() {
+        gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+    }
+</script>
+<script>
+  // canvas 画布
+  const canvas = document.getElementById('canvas');
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+  // webgl画笔
+  const gl = canvas.getContext('webgl');
+  // 顶点着色器
+  const vsSource = document.getElementById('vertexShader').innerText;
+  // 片元着色器
+  const fsSource = document.getElementById('fragmentShader').innerText;
+  // 初始化着色器
+  initShaders(gl, vsSource, fsSource);
+  // 指定将要用来清理绘图区的颜色
+  gl.clearColor(1, 0.0, 0.0, 0.2);
+  // 清理绘图区
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  // 绘制顶点
+  gl.drawArrays(gl.POINTS, 0, 1);
+
+  function initShaders(gl,vsSource,fsSource){
+    //创建程序对象
+    const program = gl.createProgram();
+    //建立着色对象
+    const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+    const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+    //把顶点着色对象装进程序对象中
+    gl.attachShader(program, vertexShader);
+    //把片元着色对象装进程序对象中
+    gl.attachShader(program, fragmentShader);
+    //连接webgl上下文对象和程序对象
+    gl.linkProgram(program);
+    //启动程序对象
+    gl.useProgram(program);
+    //将程序对象挂到上下文对象上
+    gl.program = program;
+    return true;
+  }
+
+  function loadShader(gl, type, source) {
+    //根据着色类型，建立着色器对象
+    const shader = gl.createShader(type);
+    //将着色器源文件传入着色器对象中
+    gl.shaderSource(shader, source);
+    //编译着色器对象
+    gl.compileShader(shader);
+    //返回着色器对象
+    return shader;
+  }
+</script>
+</body>
+</html>
