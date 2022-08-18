@@ -1,5 +1,12 @@
 import { Vector3} from 'https://unpkg.com/three/build/three.module.js';
 
+/**
+ *
+ * @param gl webgl上下文对象
+ * @param vsSource 顶点着色器源文件
+ * @param fsSource 片元着色器源文件
+ * @returns {boolean}
+ */
 function initShaders(gl, vsSource, fsSource) {
   //创建程序对象
   const program = gl.createProgram();
@@ -33,6 +40,13 @@ function createProgram(gl, vsSource, fsSource) {
   return program
 }
 
+/**
+ *  建立着色对象方法
+ * @param gl webgl上下文对象
+ * @param type 着色器类型 gl.VERTEX_SHADER 是顶点着色器类型 gl.FRAGMENT_SHADER是片元着色器类型。
+ * @param source 着色器源文件
+ * @returns {WebGLShader}
+ */
 function loadShader(gl, type, source) {
   //根据着色类型，建立着色器对象
   const shader = gl.createShader(type);

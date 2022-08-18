@@ -1,4 +1,4 @@
-/* 
+/*
 attributes 数据结构:{
   a_Position: {
     size: 3,
@@ -23,7 +23,9 @@ maps 数据结构:{
 }
 */
 const defAttr = () => ({
+  // webgl上下文对象
   gl:null,
+  // 绘图方式
   type:'POINTS',
   source:[],
   sourceSize:0,
@@ -33,6 +35,8 @@ const defAttr = () => ({
   uniforms: {},
   maps: {}
 })
+
+// 多边形对象
 export default class Poly{
   constructor(attr){
     Object.assign(this,defAttr(),attr)

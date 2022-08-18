@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="canvas" width="600" height="600"></canvas>
+<script id="vertexShader" type="x-shader/x-vertex">
+    attribute vec4 a_Position;
+    attribute float f_PointSize;
+    void main() {
+        gl_Position = a_Position;
+        gl_PointSize = f_PointSize;
+    }
+</script>
+<script id="fragmentShader" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform vec4 u_FragColor;
+
+    void main() {
+        gl_FragColor = u_FragColor;
+    }
+</script>
+<script type="module">
+  import {initShaders} from './js/utils.js'
+  import Poly from './js/poly02.js'
+
+  const canvas = document.getElementById('canvas')
+  const gl = canvas.getContext('webgl')
+  const vertexShader = document.getElementById('vertexShader').innerText
+  const fragmentShader = document.getElementById('fragmentShader').innerText
+
+  initShaders(gl, vertexShader, fragmentShader)
+
+  gl.clearColor(1, 0, 0, 0.2)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+
+  const poly = new Poly({
+    gl,
+    source: [
+      0, 0.1, 100
+    ],
+    attributes: {
+      a_Position: {
+        size: 2,
+        index: 0
+      },
+      f_PointSize: {
+        size: 1,
+        index: 2
+      }
+    },
+    uniforms: {
+      u_FragColor:{
+        type: 'uniform4fv',
+        value: [1.0, 1.0, 0.0, 0.2]
+      }
+    }
+  })
+
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  poly.draw()
+
+</script>
+</body>
+</html>
