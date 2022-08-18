@@ -141,7 +141,10 @@ export default class Poly {
         magFilter,
         minFilter
       } = val
+/*
+    pixelStorei(pname: GLenum, param: GLint | GLboolean): void;
 
+ */
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1)
       gl.activeTexture(gl[`TEXTURE${ind}`])
       const texture = gl.createTexture()
