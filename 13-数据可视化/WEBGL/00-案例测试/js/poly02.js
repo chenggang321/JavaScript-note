@@ -1,12 +1,12 @@
 /*
 attributes 数据结构:{
-  a_Position: {
-    size: 3, // 一个顶点所有数据的个数。必须是 1、2、3、4。
-    index:0 // 在source中属性开始数据位置
+  a_Position: { // a_Position 对应attribute变量名
+    size: 3, // 一个顶点所有数据的个数。必须是 1、2、3、4。(系列尺寸)
+    index:0 // 在source中属性开始数据位置 (系列的元素索引位置)
   }
 }
 uniforms 数据结构:{
-  u_Color: {
+  u_Color: { // u_Color 对应uniform变量名
     // 数据类型 uniform1fv uniform2fv uniform3fv uniform4fv
     // void uniform[1234][fi](uint location, ...)
     // void uniform[1234][fi]v(uint location, Array value)
@@ -29,11 +29,21 @@ maps 数据结构:{
 */
 const defAttr = () => ({
   gl: null,  // webgl上下文对象
-  type: 'POINTS', // 绘图方式
+  /*
+  绘图方式
+  POINTS 可视的点
+  LINES 单独线段
+  LINE_STRIP 线条
+  LINE_LOOP 闭合线条
+  TRIANGLES 单独三角形
+  TRIANGLE_STRIP 三角带
+  TRIANGLE_FAN 三角扇
+   */
+  type: 'POINTS',
   source: [], // 顶点数据
-  sourceSize: 0,  // 绘制图形的顶点数
+  sourceSize: 0,  // 绘制图形的顶点数(顶点总数)
   elementBytes: 4, // 单位数组字节偏移量。
-  categorySize: 0, // 属性占有的总的字节数
+  categorySize: 0, // 属性占有的总的字节数(类目尺寸)
   attributes: {}, // attributes属性
   uniforms: {}, // uniforms属性
   maps: {}
@@ -50,11 +60,11 @@ export default class Poly {
     if (!this.gl) {
       return
     }
-    // 计算数据大小
+    // 基于数据源计算类目尺寸、类目字节数、顶点总数
     this.calculateSize()
-    // 设置Attribute
+    // 更新attribute 变量
     this.updateAttribute();
-    // 设置Uniform
+    // 更新uniform变量
     this.updateUniform();
     this.updateMaps()
   }
@@ -67,8 +77,11 @@ export default class Poly {
       categorySize += size
       ele.byteIndex = index * elementBytes
     })
+    // 类目尺寸
     this.categorySize = categorySize
+    // 类目字节数
     this.categoryBytes = categorySize * elementBytes
+    // 顶点总数
     this.sourceSize = source.length / categorySize
   }
 

@@ -41,6 +41,35 @@ function loadShader(gl, type, source) {
   return shader;
 }
 
+/**
+ * dom坐标转webgl坐标
+ * @param e 点击事件
+ * @param canvas canvas
+ * @returns {number[]} 坐标位置
+ */
+function webGlClick(e,canvas){
+  // 鼠标在屏幕中的位置
+  const {clientX, clientY} = e;
+  // canvas左上角在屏幕中的位置
+  const {left, top, width, height} = canvas.getBoundingClientRect();
+  // 鼠标在canvas 2d坐标系中的位置
+  const [cssX, cssY] = [
+    clientX - left,
+    clientY - top
+  ];
+
+  // 将原点移至canvas中心
+  const [halfWidth, halfHeight] = [width / 2, height / 2];
+  let [xBaseCenter, yBaseCenter] = [cssX - halfWidth, cssY - halfHeight];
+
+  // 将y轴方向改为向上
+  yBaseCenter = -yBaseCenter;
+
+  // 解决坐标基底的差异
+  return [xBaseCenter / halfWidth, yBaseCenter / halfHeight]
+}
+
 export {
+  webGlClick,
   initShaders
 }
