@@ -85,6 +85,10 @@ export default class Poly {
     this.sourceSize = source.length / categorySize
   }
 
+  updateSource(source) {
+    this.source = source
+  }
+
   updateAttribute() {
     const {gl, attributes, categoryBytes, source} = this
     // 创建缓冲对象
