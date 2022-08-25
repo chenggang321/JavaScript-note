@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        /*#canvas {*/
+        /*    position: absolute;*/
+        /*    top: 50%;*/
+        /*    left: 50%;*/
+        /*    transform: translate(-50%, -50%);*/
+        /*}*/
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script id="vertexShader" type="x-shader/x-vertex">
+    attribute vec4 a_Position;
+    attribute vec4 a_Color;
+    attribute float a_PointSize;
+    varying vec4 v_Color;
+    void main() {
+        gl_Position = a_Position;
+        gl_PointSize = a_PointSize;
+        v_Color = a_Color;
+    }
+</script>
+<script id="fragmentShader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec4 v_Color;
+
+    void main() {
+        float dist = distance(gl_PointCoord, vec2(0.5, 0.5));
+        if (dist < 0.5) {
+            gl_FragColor = v_Color;
+        } else {
+            discard;
+        }
+    }
+</script>
+<script type="module">
+  import {initShaders, webGlClick} from './js/utils.js'
+  import Poly from './js/poly02.js'
+  import Compose from './js/Compose.js'
+  import Track from './js/Track.js'
+
+  const canvas = document.getElementById('canvas')
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const gl = canvas.getContext('webgl')
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+  const vertexShader = document.getElementById('vertexShader').innerText
+  const fragmentShader = document.getElementById('fragmentShader').innerText
+
+  initShaders(gl, vertexShader, fragmentShader)
+
+  gl.clearColor(0, 0, 0, 1)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+
+  const compose = new Compose();
+
+  const trackOpacity = () => {
+    const track = new Track({a: 1, s: 50});
+    track.start = new Date();
+    track.timeLen = 2000;
+    track.loop = true;
+    track.keyMap = new Map([
+      [
+        'a',
+        [
+          [500, 1],
+          [1000, 0],
+          [1500, 1],
+        ]
+      ],
+      ['s',
+        [
+          [500, 50],
+          [1000, 0],
+          [1500, 50]
+        ]
+      ]
+    ]);
+    compose.add(track);
+    return track
+  }
+
+  const genItem = (track, x = 0, y = 0) => [x, y, 0, 1, 1, 1, track.getTarget().a || 1, track.getTarget().s || 50]
+  let source = []
+
+  const render = () => {
+    const poly = new Poly({
+      gl,
+      source: source.reduce((total, fn) => [...total, ...fn()], []),
+      attributes: {
+        a_Position: {
+          size: 3,
+          index: 0
+        },
+        a_Color: {
+          size: 4,
+          index: 3,
+        },
+        a_PointSize: {
+          size: 1,
+          index: 7
+        }
+      }
+    })
+    gl.clear(gl.COLOR_BUFFER_BIT)
+    poly.draw()
+  }
+
+  render()
+
+  canvas.addEventListener('click', (e) => {
+    const [x, y] = webGlClick(e, canvas)
+    const track = trackOpacity()
+    source.push(() => genItem(track, x, y))
+  })
+
+  !(function ani() {
+    compose.update(new Date());
+    render();
+    requestAnimationFrame(ani);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        /*#canvas {*/
+        /*    position: absolute;*/
+        /*    top: 50%;*/
+        /*    left: 50%;*/
+        /*    transform: translate(-50%, -50%);*/
+        /*}*/
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="400" height="400"></canvas>
+<script id="vertexShader" type="x-shader/x-vertex">
+    attribute vec4 a_Position;
+    attribute vec4 a_Color;
+    attribute float a_PointSize;
+    varying vec4 v_Color;
+    void main() {
+        gl_Position = a_Position;
+        gl_PointSize = a_PointSize;
+        v_Color = a_Color;
+    }
+</script>
+<script id="fragmentShader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec4 v_Color;
+
+    void main() {
+        gl_FragColor = v_Color;
+    }
+</script>
+<script type="module">
+  import {initShaders} from './js/utils.js'
+  import Poly from './js/poly02.js'
+
+  const canvas = document.getElementById('canvas')
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const gl = canvas.getContext('webgl')
+  const vertexShader = document.getElementById('vertexShader').innerText
+  const fragmentShader = document.getElementById('fragmentShader').innerText
+
+  initShaders(gl, vertexShader, fragmentShader)
+
+  gl.clearColor(0, 0, 0, 1)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  let colorAndSize = [0, 0, 1, 1, 50]
+  let source = [
+    0, 0, 0, ...colorAndSize
+  ]
+
+  const render = () => {
+    const poly = new Poly({
+      gl,
+      source,
+      attributes: {
+        a_Position: {
+          size: 3,
+          index: 0
+        },
+        a_Color: {
+          size: 4,
+          index: 3,
+        },
+        a_PointSize: {
+          size: 1,
+          index: 7
+        }
+      }
+    })
+    gl.clear(gl.COLOR_BUFFER_BIT)
+    poly.draw()
+  }
+
+  render()
+
+  canvas.addEventListener('click', (e) => {
+    // 鼠标在屏幕中的位置
+    const {clientX, clientY} = e;
+    // canvas左上角在屏幕中的位置
+    const {left, top, width, height} = canvas.getBoundingClientRect();
+    // 鼠标在canvas 2d坐标系中的位置
+    const [cssX, cssY] = [
+      clientX - left,
+      clientY - top
+    ];
+
+    // 将原点移至canvas中心
+    const [halfWidth, halfHeight] = [width / 2, height / 2];
+    let [xBaseCenter, yBaseCenter] = [cssX - halfWidth, cssY - halfHeight];
+
+    // 将y轴方向改为向上
+    yBaseCenter = -yBaseCenter;
+
+    // 解决坐标基底的差异
+    const [x, y] = [xBaseCenter / halfWidth, yBaseCenter / halfHeight]
+    source = [...source, x, y, 0, ...colorAndSize]
+    render()
+  })
+</script>
+</body>
+</html>
