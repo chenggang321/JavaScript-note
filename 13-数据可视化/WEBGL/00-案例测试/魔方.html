@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script id="vertexShader" type="x-shader/x-vertex">
+    attribute vec4 a_Position;
+    attribute vec2 a_Pin;
+    uniform mat4 u_ModelMatrix;
+    varying vec2 v_Pin;
+    void main() {
+        gl_Position = u_ModelMatrix * a_Position;
+        v_Pin=a_Pin;
+    }
+</script>
+<script id="fragmentShader" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform sampler2D u_Sampler;
+    varying vec2 v_Pin;
+    void main() {
+        gl_FragColor=texture2D(u_Sampler,v_Pin);
+    }
+</script>
+<script type="module">
+  import {initShaders} from './js/utils.js'
+  import Poly from './js/poly02.js'
+  import { Matrix4 } from 'https://unpkg.com/three/build/three.module.js';
+
+
+  const canvas = document.getElementById('canvas')
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const gl = canvas.getContext('webgl')
+  const vertexShader = document.getElementById('vertexShader').innerText
+  const fragmentShader = document.getElementById('fragmentShader').innerText
+
+  initShaders(gl, vertexShader, fragmentShader)
+
+  gl.clearColor(0, 0, 0, 1)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+
+  // 多边形剔除功能
+  gl.enable(gl.CULL_FACE);
+  // 用来开启更新深度缓冲区的功能，也就是，如果通过比较后深度值发生变化了，
+  // 会进行更新深度缓冲区的操作。启动它，OpenGL就可以跟踪再Z轴上的像素，这样，它只会再那个像素前方没有东西时，才会绘画这个像素。
+  gl.enable(gl.DEPTH_TEST);
+
+  // 水平方向是U，垂直方向是V
+  const modelMatrix = new Matrix4()
+  const mx = new Matrix4().makeRotationX(0.01)
+  const my = new Matrix4().makeRotationY(0.01)
+  const source = [
+    -0.5, -0.5, -0.5, 0, 0,
+    -0.5, 0.5, -0.5, 0, 0.5,
+    0.5, -0.5, -0.5, 0.25, 0,
+    -0.5, 0.5, -0.5, 0, 0.5,
+    0.5, 0.5, -0.5, 0.25, 0.5,
+    0.5, -0.5, -0.5, 0.25, 0,
+
+    -0.5, -0.5, 0.5, 0.25, 0,
+    0.5, -0.5, 0.5, 0.5, 0,
+    -0.5, 0.5, 0.5, 0.25, 0.5,
+    -0.5, 0.5, 0.5, 0.25, 0.5,
+    0.5, -0.5, 0.5, 0.5, 0,
+    0.5, 0.5, 0.5, 0.5, 0.5,
+
+    -0.5, 0.5, -0.5, 0.5, 0,
+    -0.5, 0.5, 0.5, 0.5, 0.5,
+    0.5, 0.5, -0.5, 0.75, 0,
+    -0.5, 0.5, 0.5, 0.5, 0.5,
+    0.5, 0.5, 0.5, 0.75, 0.5,
+    0.5, 0.5, -0.5, 0.75, 0,
+
+    -0.5, -0.5, -0.5, 0, 0.5,
+    0.5, -0.5, -0.5, 0.25, 0.5,
+    -0.5, -0.5, 0.5, 0, 1,
+    -0.5, -0.5, 0.5, 0, 1,
+    0.5, -0.5, -0.5, 0.25, 0.5,
+    0.5, -0.5, 0.5, 0.25, 1,
+
+    -0.5, -0.5, -0.5, 0.25, 0.5,
+    -0.5, -0.5, 0.5, 0.25, 1,
+    -0.5, 0.5, -0.5, 0.5, 0.5,
+    -0.5, -0.5, 0.5, 0.25, 1,
+    -0.5, 0.5, 0.5, 0.5, 1,
+    -0.5, 0.5, -0.5, 0.5, 0.5,
+
+    0.5, -0.5, -0.5, 0.5, 0.5,
+    0.5, 0.5, -0.5, 0.75, 0.5,
+    0.5, -0.5, 0.5, 0.5, 1,
+    0.5, -0.5, 0.5, 0.5, 1,
+    0.5, 0.5, -0.5, 0.75, 0.5,
+    0.5, 0.5, 0.5, 0.75, 1,
+  ];
+
+  const poly = new Poly({
+    gl,
+    source: source,
+    type: 'TRIANGLES',
+    attributes: {
+      a_Position: {
+        size: 3,
+        index: 0
+      },
+      a_Pin:{
+        size: 2,
+        index: 3
+      }
+    },
+    uniforms:{
+      u_ModelMatrix:{
+        type: 'uniformMatrix4fv',
+        value: modelMatrix.elements
+      }
+    }
+  })
+
+  const image = new Image()
+  image.src = './images/mf.jpg'
+  image.onload = function () {
+    poly.maps = {
+      u_Sampler: {
+        image,
+        format: gl.RGBA,
+        minFilter: gl.LINEAR,
+      },
+    }
+    poly.updateMaps()
+    render()
+  }
+
+  //渲染
+  function render() {
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    poly.draw()
+  }
+
+  // 连续渲染
+  !(function ani() {
+    modelMatrix.multiply(my).multiply(mx)
+    poly.uniforms.u_ModelMatrix.value = modelMatrix.elements
+    poly.updateUniform()
+    render()
+    requestAnimationFrame(ani)
+  })()
+</script>
+</body>
+</html>

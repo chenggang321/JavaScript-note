@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script id="vertexShader" type="x-shader/x-vertex">
+    attribute vec4 a_Position;
+    attribute vec2 a_Pin;
+    varying vec2 v_Pin;
+    void main() {
+        gl_Position = a_Position;
+        v_Pin=a_Pin;
+    }
+</script>
+<script id="fragmentShader" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform sampler2D u_Sampler;
+    varying vec2 v_Pin;
+    void main() {
+        gl_FragColor=texture2D(u_Sampler,v_Pin);
+    }
+</script>
+<script type="module">
+  import {initShaders} from './js/utils.js'
+  import Poly from './js/poly02.js'
+
+  const canvas = document.getElementById('canvas')
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const gl = canvas.getContext('webgl')
+  const vertexShader = document.getElementById('vertexShader').innerText
+  const fragmentShader = document.getElementById('fragmentShader').innerText
+
+  initShaders(gl, vertexShader, fragmentShader)
+
+  gl.clearColor(0, 0, 0, 1)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  // 水平方向是U，垂直方向是V
+  const maxV = 2
+  const maxU = 2
+  const poly = new Poly({
+    gl,
+    source: [
+      -0.5, 0.5, 0, maxV,
+      -0.5, -0.5, 0, 0.0,
+      0.5, 0.5, maxV , maxV,
+      0.5, -0.5, maxU, 0.0,
+    ],
+    type: 'TRIANGLE_STRIP',
+    attributes: {
+      a_Position: {
+        size: 2,
+        index: 0
+      },
+      a_Pin:{
+        size: 2,
+        index: 2
+      }
+    }
+  })
+
+  const image = new Image()
+  image.src = './images/erha.jpg'
+  image.onload = function () {
+    poly.maps = {
+      u_Sampler: {
+        image,
+        wrapS: gl.CLAMP_TO_EDGE,
+        wrapT: gl.REPEAT
+      },
+    }
+    poly.updateMaps()
+    render()
+  }
+
+  //渲染
+  function render() {
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    poly.draw()
+  }
+
+</script>
+</body>
+</html>

@@ -18,11 +18,30 @@ uniforms 数据结构:{
 }
 maps 数据结构:{
   u_Sampler:{
-    image,
-    format,
-    wrapS,
-    wrapT,
+    image, // 图形源
+    format, // 数据类型，默认gl.RGB
+    // TEXTURE_WRAP_S和TEXTURE_WRAP_T 就是纹理容器在s方向和t方向的尺寸，这里的s、t就是st坐标系里的s、t，st坐标系和uv坐标系是一回事
+    // CLAMP_TO_EDGE 翻译过来就是边缘夹紧的意思，可以理解为任意尺寸的图像源都可以被宽高为1的uv尺寸夹紧。
+    // 注：只有CLAMP_TO_EDGE 才能实现非二次幂图像源的显示，其它的参数都不可以
+    // REPEAT 重复
+    // MIRRORED_REPEAT 镜像复制
+    // CLAMP_TO_EDGE 只对某一个方向纹理镜像复制
+    wrapS, // 对应纹理对象的TEXTURE_WRAP_S 属性
+    wrapT, // 对应纹理对象的TEXTURE_WRAP_T 属性
+    // 对应纹理对象的TEXTURE_MAG_FILTER(纹理放大滤波器，是纹理在webgl图形中被放大的情况) 属性
+    LINEAR (默认值) ，线性滤镜， 获取纹理坐标点附近4个像素的加权平均值，效果平滑
+    NEAREST 最近滤镜， 获得最靠近纹理坐标点的像素 ，效果锐利
     magFilter,
+    // 对应纹理对象的TEXTURE_MIN_FILTER(纹理缩小滤波器，是纹理在webgl图形中被缩小的情况)属性
+    // LINEAR 线性滤镜，获取纹理坐标点附近4个像素的加权平均值，效果平滑
+    // NEAREST 最近滤镜， 获得最靠近纹理坐标点的像素，效果锐利
+    // NEAREST_MIPMAP_NEAREST 获得最靠近纹理坐标点的像素并执行最近邻过滤
+    // NEAREST_MIPMAP_LINEAR (默认值) 获得最靠近纹理坐标点的像素执行线性插值
+    // LINEAR_MIPMAP_NEAREST 获得最靠近纹理坐标点的像素并在其中执行线性过滤。
+    // LINEAR_MIPMAP_LINEAR 在纹理坐标点的像素之间执行线性插值并执行线性过滤：也称为三线性过滤。
+    // 注：后面这4个与分子贴图相关的参数适合比较大的贴图，若是比较小的贴图，使用LINEAR 或NEAREST 就好。
+    // 注：缩小滤波器的默认值取色方法是NEAREST_MIPMAP_LINEAR ，这个方法会从分子贴图里找分子图像，然后从其中取色，然而当我们没有使用gl.generateMipmap()
+    // 方法建立分子贴图的时候，就得给它一个不需要从分子贴图中去色的方法，如LINEAR或NEAREST。
     minFilter
   },
 }
@@ -88,6 +107,7 @@ export default class Poly {
   updateSource(source) {
     this.source = source
   }
+
 
   updateAttribute() {
     const {gl, attributes, categoryBytes, source} = this
@@ -158,15 +178,16 @@ export default class Poly {
         magFilter,
         minFilter
       } = val
-/*
-    pixelStorei(pname: GLenum, param: GLint | GLboolean): void;
-
- */
+      // 对纹理图像垂直翻转
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1)
+      // 激活纹理单元
       gl.activeTexture(gl[`TEXTURE${ind}`])
+      // 创建纹理对象
       const texture = gl.createTexture()
+      // 把纹理对象绑定到纹理单元
       gl.bindTexture(gl.TEXTURE_2D, texture)
 
+      // 配置纹理图像
       gl.texImage2D(
         gl.TEXTURE_2D,
         0,
@@ -176,17 +197,21 @@ export default class Poly {
         image
       )
 
+      // 配置 TEXTURE_WRAP_S 纹理参数
       wrapS && gl.texParameteri(
         gl.TEXTURE_2D,
         gl.TEXTURE_WRAP_S,
         wrapS
       )
+
+      // 配置 TEXTURE_WRAP_T 纹理参数
       wrapT && gl.texParameteri(
         gl.TEXTURE_2D,
         gl.TEXTURE_WRAP_T,
         wrapT
       )
 
+      // 配置 TEXTURE_MAG_FILTER 纹理放大滤波器
       magFilter && gl.texParameteri(
         gl.TEXTURE_2D,
         gl.TEXTURE_MAG_FILTER,
@@ -194,9 +219,11 @@ export default class Poly {
       )
 
       if (!minFilter || minFilter > 9729) {
+        // 为图像源创建分子贴图，
         gl.generateMipmap(gl.TEXTURE_2D)
       }
 
+      // 配置 TEXTURE_MIN_FILTER 纹理缩小滤波器
       minFilter && gl.texParameteri(
         gl.TEXTURE_2D,
         gl.TEXTURE_MIN_FILTER,
