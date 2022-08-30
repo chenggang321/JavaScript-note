@@ -119,7 +119,8 @@
     canvas.addEventListener('contextmenu', (event) => {
       event.preventDefault()
     })
-    canvas.addEventListener('pointerdown', ({ clientX, clientY, button }) => {
+    canvas.addEventListener('pointerdown', (e) => {
+      const { clientX, clientY, button } = e
       dragStart.set(clientX, clientY)
       state = mouseButtons.get(button)
     })
@@ -144,22 +145,33 @@
     function pan({ x, y }) {
       const { right, left, top, bottom, matrix, position, up } = camera
       const { clientWidth, clientHeight } = canvas
+      //相机近裁剪面尺寸
       const cameraW = right - left
       const cameraH = top - bottom
+      //指针拖拽量在画布中的比值
       const ratioX = x / clientWidth
       const ratioY = y / clientHeight
+      //将像素单位的位移量转换为相机近裁剪面上的位移量
       const distanceLeft = ratioX * cameraW
       const distanceUp = ratioY * cameraH
+      //相机本地坐标系里的x轴
       const mx = new Vector3().setFromMatrixColumn(matrix, 0)
+      //相机x轴平移量
       const vx = mx.clone().multiplyScalar(-distanceLeft)
+      //相机z|y轴平移量
       const vy = new Vector3()
       if (screenSpacePanning) {
+        //y向
         vy.setFromMatrixColumn(matrix, 1)
       } else {
+        //-z向
         vy.crossVectors(up, mx)
       }
+      //相机y向或-z向的平移量
       vy.multiplyScalar(distanceUp)
+      //整合平移量
       panOffset.copy(vx.add(vy))
+      //更新
       update()
     }
 
