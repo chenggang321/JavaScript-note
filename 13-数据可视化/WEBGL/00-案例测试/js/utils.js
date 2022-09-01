@@ -41,6 +41,21 @@ function loadShader(gl, type, source) {
   return shader;
 }
 
+function createProgram(gl, vsSource, fsSource) {
+  //创建程序对象
+  const program = gl.createProgram();
+  //建立着色对象
+  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+  //把顶点着色对象装进程序对象中
+  gl.attachShader(program, vertexShader);
+  //把片元着色对象装进程序对象中
+  gl.attachShader(program, fragmentShader);
+  //连接webgl上下文对象和程序对象
+  gl.linkProgram(program);
+  return program
+}
+
 /**
  * dom坐标转webgl坐标
  * @param e 点击事件
@@ -71,5 +86,6 @@ function webGlClick(e,canvas){
 
 export {
   webGlClick,
-  initShaders
+  initShaders,
+  createProgram
 }
