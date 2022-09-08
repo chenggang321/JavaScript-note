@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>第一个three.js文件_WebGL三维场景</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            /* 隐藏body窗口区域滚动条 */
+        }
+    </style>
+    <!--引入three.js三维引擎-->
+    <script src="https://unpkg.com/three/build/three.js"></script>
+    <script src="https://unpkg.com/three/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+
+<body>
+<script type="module">
+    const gltfLoader = new THREE.GLTFLoader();
+    const MeshBasicMaterial = THREE.MeshBasicMaterial;
+    const TextureLoader = THREE.TextureLoader;
+    const maps = new Map()
+    const modelPath = "./models/"
+
+    function changeMat(obj, map, color) {
+        if (map) {
+            obj.material = new MeshBasicMaterial({
+                map: crtTexture(map.name),
+            });
+        } else {
+            obj.material = new MeshBasicMaterial({ color });
+        }
+    }
+
+    function crtTexture(imgName) {
+        let curTexture = maps.get(imgName);
+        if (!curTexture) {
+            curTexture = new TextureLoader().load(modelPath + imgName);
+            curTexture.flipY = false;
+            curTexture.wrapS = 1000;
+            curTexture.wrapT = 1000;
+            maps.set(imgName, curTexture);
+        }
+        return curTexture;
+    }
+
+    gltfLoader.load(modelPath + 'machineRoom.gltf',({ scene: { children } })=>{
+        children.forEach((obj) => {
+            const { map, color } = obj.material;
+            changeMat(obj, map, color);
+        });
+        scene.add(...children);
+    })
+    var scene = new THREE.Scene();
+    var width = window.innerWidth; //窗口宽度
+    var height = window.innerHeight; //窗口高度
+    var k = width / height; //窗口宽高比
+    var camera = new THREE.PerspectiveCamera(45, k, 0.1, 1000);
+    camera.position.set(0, 10, 15); //设置相机位置
+    camera.lookAt(scene.position); //设置相机方向(指向的场景对象)
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(width, height);//设置渲染区域尺寸
+    document.body.appendChild(renderer.domElement); //body元素中插入canvas对象
+    //执行渲染操作   指定场景、相机作为参数
+    function animate() {
+        renderer.render(scene, camera);
+        requestAnimationFrame(() => {
+            animate();
+        });
+    }
+    animate()
+</script>
+</body>
+</html>
