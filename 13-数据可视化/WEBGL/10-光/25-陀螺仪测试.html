@@ -86,14 +86,25 @@
     //立方体
     const box = new Box(1, 1, 1)
 
-    // 目标点
-    const target = new Vector3()
-    //视点
-    const eye = new Vector3(0, 0.45, 0.0001)
+    // // 目标点
+    // const target = new Vector3()
+    // //视点
+    // const eye = new Vector3(0, 0.45, 0.0001)
+    // const [fov, aspect, near, far] = [
+    //   120, canvas.width / canvas.height,
+    //   0.1, 5
+    // ]
+
+    const eye = new Vector3(2, 3, 5)
+    const target = new Vector3(0, 0, 0)
+
     const [fov, aspect, near, far] = [
-      120, canvas.width / canvas.height,
-      0.1, 5
+      45,
+      canvas.width / canvas.height,
+      1,
+      20
     ]
+
     // 透视相机
     const camera = new PerspectiveCamera(fov, aspect, near, far)
     camera.position.copy(eye)
