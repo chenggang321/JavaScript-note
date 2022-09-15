@@ -1,88 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>陀螺仪</title>
     <style>
-        * {
+        html {
+            height: 100%;
+        }
+
+        body {
             margin: 0;
-            padding: 0;
+            height: 100%;
+            overflow: hidden
         }
     </style>
 </head>
+
 <body>
 <canvas id="canvas"></canvas>
-<script id="vertexShader" type="x-shader/x-vertex">
+<script id="vs" type="x-shader/x-vertex">
     attribute vec4 a_Position;
     attribute vec2 a_Pin;
     uniform mat4 u_PvMatrix;
     uniform mat4 u_ModelMatrix;
     varying vec2 v_Pin;
-    void main() {
-        gl_Position = u_PvMatrix * u_ModelMatrix * a_Position;
-        v_Pin=a_Pin;
+    void main(){
+      gl_Position=u_PvMatrix*u_ModelMatrix*a_Position;
+      v_Pin=a_Pin;
     }
-
-
-
-</script>
-<script id="fragmentShader" type="x-shader/x-fragment">
+  </script>
+<script id="fs" type="x-shader/x-fragment">
     precision mediump float;
     uniform sampler2D u_Sampler;
     varying vec2 v_Pin;
-    void main() {
-        gl_FragColor=texture2D(u_Sampler,v_Pin);
+    void main(){
+      gl_FragColor=texture2D(u_Sampler,v_Pin);
     }
-
-
-
-</script>
+  </script>
 <script type="module">
-    import {createProgram} from './js/utils.js'
-    import {Matrix4, PerspectiveCamera, Vector3, Quaternion} from 'https://unpkg.com/three/build/three.module.js';
-    import {Scene, Obj3D, Geo, Mat, OrbitControls} from './jsm/Webgl.js'
+    import { createProgram } from "./jsm/Utils.js";
+    import {
+        Matrix4, PerspectiveCamera, Vector3, Ray
+    } from 'https://unpkg.com/three/build/three.module.js';
+    import OrbitControls from './lv/OrbitControls.js'
+    import Mat from './lv/Mat.js'
+    import Geo from './lv/Geo.js'
+    import Obj3D from './lv/Obj3D.js'
+    import Scene from './lv/Scene.js'
+    import Box from './lv/Box.js'
 
-    const canvas = document.getElementById('canvas')
+    const canvas = document.getElementById('canvas');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    let gl = canvas.getContext('webgl');
 
-    const gl = canvas.getContext('webgl')
-    const vertexShader = document.getElementById('vertexShader').innerText
-    const fragmentShader = document.getElementById('fragmentShader').innerText
+    //立方体
+    const box = new Box(1, 1, 1)
+    const vertices = box.vertices
+    const indexes = box.indexes
+    const uv = box.uv
+    let selected = false
+    let ang = 0
 
-    const program = createProgram(gl, vertexShader, fragmentShader)
-
-    gl.clearColor(0, 0, 0, 1)
-    gl.clear(gl.COLOR_BUFFER_BIT)
-
-    // 多边形剔除功能
-    gl.enable(gl.CULL_FACE);
-    // 用来开启更新深度缓冲区的功能，也就是，如果通过比较后深度值发生变化了，
-    // 会进行更新深度缓冲区的操作。启动它，OpenGL就可以跟踪再Z轴上的像素，这样，它只会再那个像素前方没有东西时，才会绘画这个像素。
-    gl.enable(gl.DEPTH_TEST);
-
-    // 透视相机
     const eye = new Vector3(2, 3, 5)
     const target = new Vector3(0, 0, 0)
-    const up = new Vector3(0, 1, 0)
-
     const [fov, aspect, near, far] = [
         45,
         canvas.width / canvas.height,
         1,
         20
     ]
+    // 投影视图矩阵
+    const pvMatrix = new Matrix4()
+    // 模型矩阵
+    const modelMatrix = new Matrix4()
 
+    // 透视相机
     const camera = new PerspectiveCamera(fov, aspect, near, far)
     camera.position.copy(eye)
-
-    // 实例化轨道控制器
+    // 轨道控制器
     const orbit = new OrbitControls({
-        camera, target,
+        camera,
+        target,
         dom: canvas,
+        enablePan: false,
+        maxZoom: 15,
+        minZoom: 0.4
     })
 
-    orbit.update()
+    // 场景
+    const scene = new Scene({ gl })
+    //注册程序对象
+    scene.registerProgram(
+        'map',
+        {
+            program: createProgram(
+                gl,
+                document.getElementById('vs').innerText,
+                document.getElementById('fs').innerText,
+            ),
+            attributeNames: ['a_Position', 'a_Pin'],
+            uniformNames: ['u_PvMatrix', 'u_ModelMatrix', 'u_Sampler']
+        }
+    )
+
+    //立方体
+    const matBox = new Mat({
+        program: 'map',
+        data: {
+            u_PvMatrix: {
+                value: orbit.getPvMatrix().elements,
+                type: 'uniformMatrix4fv',
+            },
+            u_ModelMatrix: {
+                value: new Matrix4().elements,
+                type: 'uniformMatrix4fv',
+            },
+        },
+    })
+    const geoBox = new Geo({
+        data: {
+            a_Position: {
+                array: vertices,
+                size: 3
+            },
+            a_Pin: {
+                array: uv,
+                size: 2
+            }
+        },
+        index: {
+            array: indexes
+        }
+    })
+
+    //加载图片
+    const image = new Image()
+    image.src = './images/mf.jpg'
+    image.onload = function () {
+        matBox.maps.u_Sampler = { image }
+        scene.add(new Obj3D({
+            geo: geoBox,
+            mat: matBox
+        }))
+        render()
+    }
+
+    function render() {
+        orbit.getPvMatrix()
+        if(selected){
+            ang += 0.02
+            matBox.setData(
+                'u_ModelMatrix',
+                {
+                    value: new Matrix4().makeRotationY(ang).elements
+                }
+            )
+        }
+        scene.draw()
+        requestAnimationFrame(render)
+    }
+
+    function selectObj(event) {
+        const mp = worldPos(event)
+        // 射线
+        const ray = new Ray(camera.position).lookAt(mp)
+        // 选择状态
+        selected = false
+        // 遍历三角形
+        for (let i = 0; i < indexes.length; i += 3) {
+            // 三角形
+            const triangle = [
+                getVector3(indexes[i]),
+                getVector3(indexes[i + 1]),
+                getVector3(indexes[i + 2]),
+            ]
+            // 射线与三角形的交点
+            const interPos = intersectTriangle(ray, triangle)
+            // 更新选择状态
+            if (interPos) {
+                selected = true
+                break
+            }
+        }
+    }
+
+    // 射线与三角形的交点
+    function intersectTriangle(ray, triangle) {
+        const { origin: E, direction: v } = ray
+        const [A, B, C] = triangle
+        // 三角形的法线
+        const AB = new Vector3().subVectors(B, A)
+        const BC = new Vector3().subVectors(C, B)
+        const n = new Vector3().crossVectors(AB, BC)
+
+        // 射线和平面的交点
+        const M = v.clone().multiplyScalar(
+            A.clone().sub(E).dot(n) / v.clone().dot(n)
+        ).add(E)
+
+        // 判断点M是否在三角形中
+        let bool = true
+        for (let i = 0; i < 3; i++) {
+            const j = (i + 1) % 3
+            const [a, b] = [triangle[i], triangle[j]]
+            const ma = a.clone().sub(M)
+            const ab = b.clone().sub(a)
+            const d = ma.clone().cross(ab)
+            const len = d.dot(n)
+            if (len < 0) {
+                bool = false
+                break
+            }
+        }
+        if (bool) {
+            return M
+        } else {
+            return null
+        }
+    }
+
+    // 基于顶点索引获取顶点数据
+    function getVector3(j) {
+        const i = j * 3
+        return new Vector3(
+            vertices[i],
+            vertices[i + 1],
+            vertices[i + 2],
+        ).applyMatrix4(modelMatrix)
+    }
+
+    // 获取鼠标世界位
+    function worldPos({ clientX, clientY }) {
+        const [hw, hh] = [canvas.width / 2, canvas.height / 2]
+        // 裁剪空间位
+        const cp = new Vector3(
+            (clientX - hw) / hw,
+            -(clientY - hh) / hh,
+            0
+        )
+        // 鼠标在世界坐标系中的位置
+        return cp.applyMatrix4(
+            pvMatrix.clone().invert()
+        )
+    }
+
 
     /* 取消右击菜单的显示 */
     canvas.addEventListener('contextmenu', event => {
@@ -95,6 +258,8 @@
     /* 指针移动时，若控制器处于平移状态，平移相机；若控制器处于旋转状态，旋转相机。 */
     canvas.addEventListener('pointermove', event => {
         orbit.pointermove(event)
+        pvMatrix.copy(orbit.getPvMatrix())
+        selectObj(event)
     })
     /* 指针抬起 */
     canvas.addEventListener('pointerup', event => {
@@ -102,132 +267,11 @@
     })
     /* 滚轮事件 */
     canvas.addEventListener('wheel', event => {
-        orbit.wheel(event)
+        orbit.wheel(event, 'OrthographicCamera')
     })
 
-    const scene = new Scene({gl})
 
-    let mat = null;
-    let geo = null;
-
-    const image = new Image()
-    image.src = './images/mf.jpg'
-
-    image.onload = function () {
-        mat = new Mat({
-            program,
-            data: {
-                u_PvMatrix: {
-                    value: orbit.getPvMatrix().elements,
-                    type: 'uniformMatrix4fv',
-                },
-                u_ModelMatrix: {
-                    value: new Matrix4().elements,
-                    type: 'uniformMatrix4fv',
-                },
-            },
-            maps: {
-                u_Sampler: {
-                    image,
-                    format: gl.RGBA,
-                    minFilter: gl.LINEAR,
-                },
-            }
-        })
-
-//    v6----- v5
-//   /|      /|
-//  v1------v0|
-//  | |     | |
-//  | |v7---|-|v4
-//  |/      |/
-//  v2------v3
-
-        const source = [
-            -0.5, -0.5, -0.5, 0, 0,
-            -0.5, 0.5, -0.5, 0, 0.5,
-            0.5, -0.5, -0.5, 0.25, 0,
-            -0.5, 0.5, -0.5, 0, 0.5,
-            0.5, 0.5, -0.5, 0.25, 0.5,
-            0.5, -0.5, -0.5, 0.25, 0,
-
-            -0.5, -0.5, 0.5, 0.25, 0,
-            0.5, -0.5, 0.5, 0.5, 0,
-            -0.5, 0.5, 0.5, 0.25, 0.5,
-            -0.5, 0.5, 0.5, 0.25, 0.5,
-            0.5, -0.5, 0.5, 0.5, 0,
-            0.5, 0.5, 0.5, 0.5, 0.5,
-
-            -0.5, 0.5, -0.5, 0.5, 0,
-            -0.5, 0.5, 0.5, 0.5, 0.5,
-            0.5, 0.5, -0.5, 0.75, 0,
-            -0.5, 0.5, 0.5, 0.5, 0.5,
-            0.5, 0.5, 0.5, 0.75, 0.5,
-            0.5, 0.5, -0.5, 0.75, 0,
-
-            -0.5, -0.5, -0.5, 0, 0.5,
-            0.5, -0.5, -0.5, 0.25, 0.5,
-            -0.5, -0.5, 0.5, 0, 1,
-            -0.5, -0.5, 0.5, 0, 1,
-            0.5, -0.5, -0.5, 0.25, 0.5,
-            0.5, -0.5, 0.5, 0.25, 1,
-
-            -0.5, -0.5, -0.5, 0.25, 0.5,
-            -0.5, -0.5, 0.5, 0.25, 1,
-            -0.5, 0.5, -0.5, 0.5, 0.5,
-            -0.5, -0.5, 0.5, 0.25, 1,
-            -0.5, 0.5, 0.5, 0.5, 1,
-            -0.5, 0.5, -0.5, 0.5, 0.5,
-
-            0.5, -0.5, -0.5, 0.5, 0.5,
-            0.5, 0.5, -0.5, 0.75, 0.5,
-            0.5, -0.5, 0.5, 0.5, 1,
-            0.5, -0.5, 0.5, 0.5, 1,
-            0.5, 0.5, -0.5, 0.75, 0.5,
-            0.5, 0.5, 0.5, 0.75, 1,
-        ];
-        const a_Position = [];
-        const a_Pin = [];
-
-        for (let i = 0; i < source.length/5; i++) {
-            const index = i*5
-                a_Position.push(
-                    source[index]/0.5,
-                    source[index + 1]/0.5,
-                    source[index + 2]/0.5,
-                )
-                a_Pin.push(
-                    source[index + 3],
-                    source[index + 4],
-                )
-        }
-
-        geo = new Geo({
-            data: {
-                a_Position: {
-                    array: new Float32Array(a_Position),
-                    size: 3
-                },
-                a_Pin: {
-                    array: new Float32Array(a_Pin),
-                    size: 2
-                }
-            }
-        })
-
-        const obj = new Obj3D({geo, mat})
-
-        scene.add(obj)
-
-        !(function ani() {
-            scene.setUniform(
-                'u_PvMatrix',
-                orbit.getPvMatrix().elements
-            )
-            scene.draw()
-            requestAnimationFrame(ani)
-        })()
-    }
 </script>
 </body>
+
 </html>
