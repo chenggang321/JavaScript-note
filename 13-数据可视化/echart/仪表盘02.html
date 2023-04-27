@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.1/echarts.min.js"></script>
+    <script src="walden.js"></script>
+</head>
+<body>
+<div id="echarts" style="width: 600px;height:400px"></div>
+<script>
+    var chartDom = document.getElementById('echarts');
+    var myChart = echarts.init(chartDom, 'walden');
+    var option;
+    option = {
+        tooltip: {
+            formatter: '{a} <br/>{b} : {c}%'
+        },
+        series: [
+            {
+                name: '总完成率',
+                type: 'gauge',
+                progress: {
+                    show: true
+                },
+                detail: {
+                    valueAnimation: true,
+                    formatter: '{value}%',
+                },
+                data: [
+                    {
+                        value: '87',
+                        name: '总完成率'
+                    }
+                ],
+                title: {
+                    show: true,
+                    offsetCenter: [0, '30px'],
+                    textStyle: {
+                        color: '#ccc',
+                        fontStyle: 'normal',
+                        fontWeight: 'normal',
+                        fontFamily: '微软雅黑',
+                        fontSize: 16
+                    }
+                },
+                axisLabel: {
+                    formatter: function(e) {
+                        switch (e + "") {
+                            case "10":
+                                return "差";
+                            case "50":
+                                return "中";
+                            case "70":
+                                return "良";
+                            case "90":
+                                return "优";
+                            default:
+                                return e;
+                        }
+                    },
+                    textStyle: {
+                        fontSize: 12,
+                        fontWeight: ""
+                    }
+                },
+            }
+        ]
+    };
+
+    option && myChart.setOption(option);
+</script>
+</body>
+</html>

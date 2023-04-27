@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script id="vertexShader" type="x-shader/x-vertex">
+uniform vec2 uOffset;
+// uniform float uBend;
+// uniform float uZ;
+varying vec2 vUv;
+
+#define M_PI 3.1415926535897932384626433832795
+
+vec3 deformationCurve(vec3 position, vec2 uv, vec2 offset) {
+	position.x = position.x + (sin(uv.y * M_PI) * offset.x);
+	position.y = position.y + (sin(uv.x * M_PI) * offset.y);
+	return position;
+ }
+
+void main() {
+	vUv = uv;
+	// vec3 newPosition = position;
+	vec3 newPosition = deformationCurve(position, uv, uOffset);
+
+	// float x = position.x;
+	// float y = position.y;
+	// float d = sqrt(x * x + y * y);
+	// float maxZ = sqrt(.5 * .5 + .5 * .5);
+	// newPosition = vec3(x, y, uZ + ((d-maxZ)*200.0*uBend));
+
+	gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+}
+</script>
+
+<script id="fragmentShader" type="x-shader/x-fragment">
+uniform vec4 resolution;
+uniform sampler2D uTexture;
+uniform float opacity;
+uniform float scaleY;
+uniform float pctY;
+varying vec2 vUv;
+
+
+void main() {
+	vec2 newUV = (vUv - vec2(0.5))*resolution.zw + vec2(0.5) + vec2(.0, (-scaleY*.5)+(scaleY*pctY));
+	gl_FragColor = texture2D(uTexture,newUV);
+	gl_FragColor.a = opacity;
+}
+</script>
+
+<!--<script id="fragmentShader" type="x-shader/x-fragment">
+uniform float time;
+uniform float progress;
+uniform sampler2D tDiffuse;
+uniform vec2 resolution;
+varying vec2 vUv;
+uniform vec2 uMouse;
+uniform float uVelo;
+uniform float zoom;
+uniform float scale;
+uniform float cursorScale;
+
+float circle(vec2 uv, vec2 disc_center, float disc_radius, float border_size) {
+    uv -= disc_center;
+    uv *= resolution;
+    float dist = sqrt(dot(uv, uv));
+    return smoothstep(disc_radius + border_size, disc_radius - border_size, dist);
+}
+
+void main() {
+	vec2 newUV = vUv;
+	vec4 color = texture2D(tDiffuse, newUV);
+
+    if(zoom > 0.0){
+		vec2 uCenter = vec2(.5, .5);
+		float intensity = .0375*zoom;
+		float c = circle(newUV, uCenter, 0.0, 0.2 + intensity * scale) * 40. * intensity;
+		newUV = mix(vUv, uCenter, c);
+		// color = texture2D(tDiffuse, newUV);// + texture2D(tDiffuse,warpedUV)*vec4(vec3(c),1.);
+	}
+
+	float c = circle(newUV, uMouse, 0.0, cursorScale);
+    color = texture2D(tDiffuse, newUV.xy + c * uVelo);
+
+	gl_FragColor = color;
+}
+</script>
+<script id="vertexShader" type="x-shader/x-vertex">
+varying vec2 vUv;
+
+void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+</script>-->
+<!--<script id="vertexShader" type="x-shader/x-vertex">
+    attribute vec4 a_Position;
+    // 模型矩阵
+    uniform mat4 u_ModelMatrix;
+    // 视图矩阵
+    uniform mat4 u_ViewMatrix;
+    attribute vec4 a_Color;
+    varying vec4 v_Color;
+    void main() {
+        gl_Position = u_ViewMatrix * u_ModelMatrix * a_Position;
+        v_Color = a_Color;
+        gl_PointSize=3.0;
+    }
+</script>
+<script id="fragmentShader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec4 v_Color;
+
+    void main() {
+        gl_FragColor = v_Color;
+    }
+</script>-->
+<script type="module">
+  import {initShaders} from './js/utils.js'
+  import Poly from './js/poly02.js'
+  import { Matrix4, Vector3 } from 'https://unpkg.com/three/build/three.module.js'
+
+  const canvas = document.getElementById('canvas')
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const gl = canvas.getContext('webgl')
+  const vertexShader = document.getElementById('vertexShader').innerText
+  const fragmentShader = document.getElementById('fragmentShader').innerText
+
+  initShaders(gl, vertexShader, fragmentShader)
+
+  gl.clearColor(0, 0, 0, 1)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+
+  // 视图矩阵
+  const viewMatrix = new Matrix4().lookAt(
+    new Vector3(0.2, 0.2, 1),
+    new Vector3(0, 0, 0),
+    new Vector3(0, 1, 0)
+  )
+  // 模型矩阵
+  const modelMatrix = new Matrix4()
+
+  /* x,z 方向的空间坐标极值 */
+  const [minPosX, maxPosX, minPosZ, maxPosZ] = [
+    -0.7, 0.8, -1, 1
+  ]
+
+  /* x,z 方向的弧度极值 */
+  const [minAngX, maxAngX, minAngZ, maxAngZ] = [
+    0, Math.PI * 4, 0, Math.PI * 2
+  ]
+
+  /* 比例尺：将空间坐标和弧度相映射 */
+  const scalerX = ScaleLinear(minPosX, minAngX, maxPosX, maxAngX)
+  const scalerZ = ScaleLinear(minPosZ, minAngZ, maxPosZ, maxAngZ)
+
+  const poly = new Poly({
+    gl,
+    source: crtVertices(),
+    attributes: {
+      a_Position: {
+        size: 3,
+        index: 0
+      },
+      a_Color:{
+        size: 4,
+        index: 3,
+      },
+    },
+    uniforms:{
+      u_ModelMatrix:{
+        type: 'uniformMatrix4fv',
+        value: modelMatrix.elements
+      },
+      u_ViewMatrix:{
+        type: 'uniformMatrix4fv',
+        value: viewMatrix.elements
+      }
+    }
+  })
+
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  poly.draw()
+
+  function update(){
+    gl.clear(gl.COLOR_BUFFER_BIT)
+    poly.init()
+    poly.draw()
+  }
+
+  /* 动画:偏移phi */
+  let offset = 0
+  !(function ani() {
+    offset += 0.08
+    const source = updateVertices(poly.source,offset)
+    poly.updateSource(source)
+    update()
+    requestAnimationFrame(ani)
+  })()
+
+  //线性比例尺
+  function ScaleLinear(ax, ay, bx, by) {
+    const delta = {
+      x: bx - ax,
+      y: by - ay,
+    };
+    const k = delta.y / delta.x;
+    const b = ay - ax * k;
+    return function (x) {
+      return k * x + b;
+    };
+  }
+
+  //更新顶点高度
+  function updateVertices(vertices = [],offset = 0) {
+    for (let i = 0; i < vertices.length; i += 7) {
+      const [posX, posZ] = [vertices[i], vertices[i + 2]]
+      const angZ = scalerZ(posZ)
+      const Omega = 2
+      const a = Math.sin(angZ) * 0.1 + 0.03
+      const phi = scalerX(posX) + offset
+      vertices[i + 1] = SinFn(a, Omega, phi)(angZ)
+    }
+
+    return vertices
+  }
+
+  /* 建立顶点集合 */
+  function crtVertices(offset = 0) {
+    const vertices = []
+    for (let z = minPosZ; z < maxPosZ; z += 0.04) {
+      for (let x = minPosX; x < maxPosX; x += 0.03) {
+        vertices.push(x, 0, z,0,1,0,1)
+      }
+    }
+    return vertices
+  }
+
+  /* 正弦函数 */
+  function SinFn(a, Omega, phi) {
+    return function (x) {
+      return a * Math.sin(Omega * x + phi);
+    }
+  }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.1/echarts.min.js"></script>
+    <script src="walden.js"></script>
+</head>
+<body>
+<div id="echarts" style="width: 600px;height:400px"></div>
+<script>
+    var chartDom = document.getElementById('echarts');
+    var myChart = echarts.init(chartDom, 'walden');
+    var option;
+
+    var keyValue = 60;
+    var name = "中";
+    if (keyValue < 50) {
+        name = "低";
+    } else if (keyValue > 80) {
+        name = "高";
+    }
+    var serie = [600, -200, 300, 500];
+    var tital = '贡献度指数: ' + serie[0];
+    var serie1 = [6, 2, 8];
+    var serie2 = [0.3, 0.5, 0.2];
+    var colors = ['#5793f3', '#d48265', '#91c7ae'];
+    //var colors = ['orange', '#d14a61', '#1E90FF'];
+    var legend = ['分值', '权重'];
+    // 基于准备好的dom，初始化echarts实例
+    option = null;
+    option = {
+        backgroundColor: '#ffffff',
+        title: [{
+            text: tital,
+            left: '50%',
+            top: '5%',
+            textAlign: 'center'
+        }, {
+            left: '28%',
+            top: '51%',
+            textAlign: 'center'
+        }, {
+            text: '',
+            left: '78%',
+            top: '51%',
+            textAlign: 'center'
+        }],
+        toolbox: {
+            feature: {
+                dataView: {
+                    show: true,
+                    optionToContent: function(opt) {
+                        var table = '';
+                        table += '<table style="width:100%;text-align:center"><tbody>';
+                        table += '<tr><td>贡献度指数</td><td>存款效益</td><td>贷款效益</td><td>贷款效益</td></tr>';
+                        table += '<tr>' + '<td>' + serie[0] + '</td>' + '<td>' + serie[1] + '</td>' + '<td>' + serie[2] + '</td>' + '<td>' + serie[3] + '</td>' + '</tr>';
+                        table += '</tbody></table>';
+                        table += '<hr/>';
+                        table += '<table style="width:100%;text-align:center"><tbody>';
+                        table += '<tr><td style="text-align:left;">忠诚度指数:' + keyValue + '</td></tr>';
+                        table += '</tbody></table>';
+                        table += '<hr/>';
+                        table += '<table style="width:100%;text-align:center"><tbody>';
+                        table += '<tr><td>忠诚度指数明细</td><td>存款</td><td>理财</td><td>基金</td></tr>';
+                        table += '<tr>' + '<td>分值</td>' + '<td>' + serie1[0] + '</td>' + '<td>' + serie1[1] + '</td>' + '<td>' + serie1[2] + '</td>' + '</tr>';
+                        table += '<tr>' + '<td>权重</td>' + '<td>' + serie2[1] + '</td>' + '<td>' + serie2[1] + '</td>' + '<td>' + serie2[2] + '</td>' + '</tr>';
+                        table += '</tbody></table>';
+                        return table;
+                    },
+                    readOnly: true
+                },
+                restore: {
+                    show: true
+                },
+                saveAsImage: {
+                    show: true
+                }
+            }
+        },
+        /* tooltip: {
+        trigger: 'axis'
+        } ,*/
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            },
+            fomatter: function(obj) {
+                return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' + tital + '</div>' +
+                    '<span>' + '存款效益' + '</span>' +
+                    ' : ' + serie[1] + '<br/>' +
+                    '<span>' + '中间业务效益' + '</span>' + ' : ' + serie[2] + '<span>' +
+                    '贷款效益' + '</span>' + ' : ' + serie[3]
+            }
+        },
+        legend: {
+            type: 'plain',
+            top: '35%',
+            pageButtonGap: 10,
+            pageButtonPosition: 'end',
+            data: ['存款效益', '中间业务效益', '贷款效益']
+        },
+        grid: [{
+            show: false,
+            left: '0%',
+            top: '5%',
+            containLabel: true,
+            width: '95%',
+            height: '30%'
+        }, {
+            show: false,
+            left: '3%',
+            top: '48%',
+            containLabel: true,
+            width: '45%',
+            height: '50%'
+        }, {
+            show: false,
+            left: '53%',
+            top: '48%',
+            containLabel: true,
+            width: '42%',
+            height: '45%'
+        }],
+        /* legend : [ {
+        type : 'plain',
+        top : '35%',
+        data : [ '存款效益', '中间业务效益', '贷款效益' ]
+        }, {
+        }, {
+        type : 'scroll',
+        top : '5%',
+        pageButtonGap : 10,
+        pageButtonPosition : 'end',
+        data : [ '暂降频次3', '暂降频次4' ],
+        x : 'right',
+        } ], */
+        xAxis: [{
+            gridIndex: 0,
+            type: 'value',
+            offset: -85,
+            splitLine: {
+                show: false, //让X轴数据不显示
+            }
+        }, {
+            gridIndex: 1,
+            show: false
+        }, {
+            gridIndex: 2,
+            type: 'category',
+            axisLabel: {
+                // interval:0,//横轴信息全部显示
+                rotate: -30 //-30度角倾斜显示
+            },
+            name: '忠诚度指数明细',
+            nameLocation: 'center',
+            nameGap: '30',
+            nameTextStyle: {
+                fontSize: 12
+            },
+            axisTick: {
+                // alignWithLabel: true
+            },
+            // boundaryGap: false,
+            data: ['存款', '理财', '基金']
+        }],
+        yAxis: [{
+            gridIndex: 0,
+            type: 'category',
+            splitNumber: 0,
+            boundaryGap: [0, 0],
+            axisLabel: {
+                show: false, //让Y轴数据不显示
+            },
+            itemStyle: {},
+            axisTick: {
+                show: false, //隐藏Y轴刻度
+            },
+            axisLine: {
+                show: false, //隐藏Y轴线段
+            },
+            data: [tital]
+        }, {
+            gridIndex: 1,
+            position: 'left',
+            show: false
+        }, {
+            gridIndex: 2,
+            type: 'value',
+            name: '分值',
+            position: 'left',
+            axisLine: {
+                lineStyle: {
+                    color: colors[1]
+                }
+            },
+            axisLabel: {
+                formatter: '{value} '
+            },
+            axisTick: {
+                alignWithLabel: true
+            }
+        }, {
+            gridIndex: 2,
+            type: 'value',
+            name: '权重',
+            position: 'right',
+            axisLine: {
+                lineStyle: {
+                    color: colors[2]
+                }
+            },
+            axisLabel: {
+                formatter: '{value} '
+            },
+            axisTick: {
+                alignWithLabel: true
+            }
+        }],
+        series: [{
+            name: '存款效益',
+            type: 'bar',
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            stack: '效益',
+            barCategoryGap: 0,
+            barGap: 0,
+            barWidth: 50,
+            label: {
+                normal: {
+                    show: true,
+                    position: 'insideRight'
+                }
+            },
+            data: [serie[1]]
+        }, {
+            name: '中间业务效益',
+            type: 'bar',
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            stack: '效益',
+            barCategoryGap: 0,
+            barGap: 0,
+            barWidth: 50,
+            label: {
+                normal: {
+                    show: true,
+                    position: 'insideRight'
+                }
+            },
+            data: [serie[2]]
+        }, {
+            name: '贷款效益',
+            type: 'bar',
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            stack: '效益',
+            barCategoryGap: 0,
+            barGap: 0,
+            barWidth: 50,
+            label: {
+                normal: {
+                    show: true,
+                    position: 'insideRight'
+                }
+            },
+            data: [serie[3]]
+        }, {
+            name: '忠诚度指数',
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            type: 'gauge',
+            radius: '50%',
+            center: ['27%', '73%'],
+            min: 0,
+            max: 100,
+            axisLine: {
+                show: true,
+                lineStyle: {
+                    width: 30,
+                    shadowBlur: 0,
+                    color: [
+                        [0.3, '#C23531'],
+                        [0.6, '#63869e'],
+                        [0.8, '#bda29a'],
+                        [0.9, '#d48265'],
+                        [1, '#91c7ae']
+                    ]
+                }
+            },
+            axisLabel: {
+                formatter: function(e) {
+                    switch (e + "") {
+                        case "10":
+                            return "低";
+                        case "50":
+                            return "一般";
+                        case "70":
+                            return "良好";
+                        case "90":
+                            return "高";
+                        case "100":
+                            return "极好";
+                        default:
+                            return e;
+                    }
+                },
+                textStyle: {
+                    fontSize: 12,
+                    fontWeight: ""
+                }
+            },
+            detail: {
+                formatter: '{value}'
+            },
+            title: {
+                fontSize: 12
+            },
+            data: [{
+                value: keyValue,
+                name: '忠诚度指数'
+            }]
+        }, {
+            name: '分值',
+            type: 'bar',
+            smooth: true,
+            barWidth: 25,
+            xAxisIndex: 2,
+            yAxisIndex: 2,
+            symbolSize: 8, //拐点大小
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top',
+                    color: colors[1],
+                }
+            },
+            lineStyle: {
+                normal: {
+                    width: 4,
+                    color: colors[1]
+                }
+            },
+            data: serie1
+        }, {
+            name: '权重',
+            type: 'bar',
+            smooth: true,
+            barWidth: 25,
+            xAxisIndex: 2,
+            yAxisIndex: 3,
+            symbolSize: 8, //拐点大小
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top',
+                    color: colors[2],
+                }
+            },
+            lineStyle: {
+                normal: {
+                    width: 4,
+                    color: colors[2]
+                }
+            },
+            data: serie2
+        }]
+    };
+
+    option && myChart.setOption(option);
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.1/echarts.min.js"></script>
+    <script src="walden.js"></script>
+</head>
+<body>
+<div id="echarts" style="width: 600px;height:400px"></div>
+<script>
+    var chartDom = document.getElementById('echarts');
+    var myChart = echarts.init(chartDom, 'walden');
+    var option;
+    option = {
+        title: {
+            text: '预估收费',
+            subtext: '￥1234，53',
+            x: 'center',
+            y: 'center',
+            top: '42%',
+            textStyle: {
+                fontWeight: 'normal',
+                fontSize: 14
+            },
+            subtextStyle: {
+                fontWeight: 'normal',
+                fontSize: 22,
+                color: '#333'
+            }
+        },
+        tooltip: {
+            trigger: 'item',
+            // formatter: function(params, ticket, callback) {
+            //     var res = params.seriesName;
+            //     res += '<br/>' + params.name + ' : ' + params.percent + '%';
+            //     return res;
+            // }
+        },
+        // legend: {
+        //     orient: 'vertical',
+        //     right: '0%',
+        //     bottom: '0%',
+        //     data: ['食堂', '超市', '刷卡', '交通'],
+        //     itemWidth: 20,
+        //     itemHeight: 10
+        // },
+        series: [{
+            name: '预估收费',
+            type: 'pie',
+            selectedMode: 'single',
+            radius: ['50%', '90%'],
+            itemStyle: {
+                borderRadius: 10,
+                borderColor: '#fff',
+                borderWidth: 8
+            },
+            label: {
+                normal: {
+                    show:false,
+                    position: 'inner',
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: 14
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            data: [{
+                value: 11,
+                name: '食堂'
+            }, {
+                value: 22,
+                name: '超市'
+            }, {
+                value: 33,
+                name: '刷卡'
+            }, {
+                value: 22,
+                name: '交通'
+            }]
+        }]
+    };
+
+    option && myChart.setOption(option);
+</script>
+</body>
+</html>
